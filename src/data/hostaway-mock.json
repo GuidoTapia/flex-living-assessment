@@ -1,0 +1,52 @@
+[
+    {
+        "id": "r_1001",
+        "listingId": "l_101",
+        "listingName": "Shoreditch Loft",
+        "type": "public",
+        "channel": "airbnb",
+        "rating": 4.6,
+        "title": "Great location, stylish loft",
+        "comment": "We loved the neighborhood and check-in was smooth.",
+        "author": "Ellen",
+        "language": "en",
+        "createdAt": "2025-06-14T10:21:00Z"
+        },
+        {
+        "id": "r_1002",
+        "listingId": "l_101",
+        "listingName": "Shoreditch Loft",
+        "type": "private",
+        "channel": "airbnb",
+        "rating": 3.0,
+        "title": null,
+        "comment": "Bed was a bit firm but host was responsive.",
+        "author": "Marcus",
+        "language": "en",
+        "createdAt": "2025-06-15T08:02:00Z"
+        }
+        {
+            "id": 7453,
+            "type": "host-to-guest",
+            "status": "published",
+            "rating": null,
+            "publicReview": "Shane and family are wonderful! Would definitely host again :)",
+            "reviewCategory": [
+            {
+            "category": "cleanliness",
+            "rating": 10
+            },
+            {
+            "category": "communication",
+            "rating": 10
+            },
+            {
+            "category": "respect_house_rules",
+            "rating": 10
+            }
+            ],
+            "submittedAt": "2020-08-21 22:45:14",
+            "guestName": "Shane Finkelstein",
+            "listingName": "2B N1 A - 29 Shoreditch Heights"
+            }
+    ]
