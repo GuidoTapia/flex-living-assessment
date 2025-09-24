@@ -39,17 +39,23 @@ export const authConfig = {
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("🔐 Credentials Provider - Received credentials:", credentials);
-        
+        console.log(
+          "🔐 Credentials Provider - Received credentials:",
+          credentials,
+        );
+
         if (!credentials?.email || !credentials?.password) {
           console.log("❌ Credentials Provider - Missing email or password");
           return null;
         }
 
-        console.log("🔍 Credentials Provider - Looking for user:", credentials.email);
+        console.log(
+          "🔍 Credentials Provider - Looking for user:",
+          credentials.email,
+        );
         const user = await db.user.findUnique({
           where: {
             email: credentials.email,
@@ -61,7 +67,11 @@ export const authConfig = {
           return null;
         }
 
-        console.log("👤 Credentials Provider - User found:", { id: user.id, email: user.email, hasPassword: !!user.password });
+        console.log("👤 Credentials Provider - User found:", {
+          id: user.id,
+          email: user.email,
+          hasPassword: !!user.password,
+        });
 
         // Check if user has a password (for credential-based auth)
         if (!user.password) {
@@ -70,8 +80,11 @@ export const authConfig = {
         }
 
         console.log("🔑 Credentials Provider - Comparing passwords");
-        const isPasswordValid = await bcrypt.compare(credentials.password, user.password as string);
-        
+        const isPasswordValid = await bcrypt.compare(
+          credentials.password,
+          user.password as string,
+        );
+
         if (!isPasswordValid) {
           console.log("❌ Credentials Provider - Password invalid");
           return null;

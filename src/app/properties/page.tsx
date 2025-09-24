@@ -13,10 +13,14 @@ import {
   Avatar,
   Rating,
 } from "@mantine/core";
-import { IconStar, IconMapPin, IconCalendar, IconUsers } from "@tabler/icons-react";
+import {
+  IconStar,
+  IconMapPin,
+  IconCalendar,
+  IconUsers,
+} from "@tabler/icons-react";
 
 export default async function PropertiesPage() {
-  
   const mockProperties = [
     {
       id: "1",
@@ -145,7 +149,7 @@ export default async function PropertiesPage() {
                   <Title order={3} size="h4">
                     {property.name}
                   </Title>
-                  
+
                   <Group gap="xs" c="dimmed">
                     <IconMapPin size={16} />
                     <Text size="sm">

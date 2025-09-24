@@ -19,7 +19,12 @@ import {
   Image,
   Flex,
 } from "@mantine/core";
-import { IconMail, IconLock, IconAlertCircle, IconBuilding } from "@tabler/icons-react";
+import {
+  IconMail,
+  IconLock,
+  IconAlertCircle,
+  IconBuilding,
+} from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 
 export default function SignInPage() {
@@ -32,7 +37,6 @@ export default function SignInPage() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
-  
   useEffect(() => {
     console.log("SignIn - Auth status:", status);
     console.log("SignIn - Session:", !!session);
@@ -76,7 +80,7 @@ export default function SignInPage() {
           message: "Welcome back!",
           color: "green",
         });
-        
+
         router.push("/dashboard");
         router.refresh();
       }
@@ -94,17 +98,18 @@ export default function SignInPage() {
   return (
     <Container size={420} my={40}>
       <Paper radius="md" p="xl" withBorder>
-        <Flex align="center" justify="center" direction="column" mb="xl" gap="sm">
-        <Image
-                  src="/the-flex.webp"
-                  alt="The Flex"
-                  h={32}
-                  w="auto"
-                />
+        <Flex
+          align="center"
+          justify="center"
+          direction="column"
+          mb="xl"
+          gap="sm"
+        >
+          <Image src="/the-flex.webp" alt="The Flex" h={32} w="auto" />
           <Text c="dimmed" size="sm">
             Sign in to your account
           </Text>
-          </Flex>
+        </Flex>
 
         <form onSubmit={handleSubmit}>
           <Stack>

@@ -1,8 +1,11 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const reviewRouter = createTRPCRouter({
-  
   getAll: publicProcedure
     .input(
       z.object({
@@ -17,12 +20,28 @@ export const reviewRouter = createTRPCRouter({
         categoryId: z.string().optional(),
         dateFrom: z.date().optional(),
         dateTo: z.date().optional(),
-        sortBy: z.enum(["createdAt", "rating", "updatedAt"]).default("createdAt"),
+        sortBy: z
+          .enum(["createdAt", "rating", "updatedAt"])
+          .default("createdAt"),
         sortOrder: z.enum(["asc", "desc"]).default("desc"),
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { limit, cursor, propertyId, listingId, approved, channel, ratingMin, ratingMax, categoryId, dateFrom, dateTo, sortBy, sortOrder } = input;
+      const {
+        limit,
+        cursor,
+        propertyId,
+        listingId,
+        approved,
+        channel,
+        ratingMin,
+        ratingMax,
+        categoryId,
+        dateFrom,
+        dateTo,
+        sortBy,
+        sortOrder,
+      } = input;
 
       const reviews = await ctx.db.review.findMany({
         take: limit + 1,
@@ -60,7 +79,6 @@ export const reviewRouter = createTRPCRouter({
       };
     }),
 
-  
   getByProperty: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -81,7 +99,6 @@ export const reviewRouter = createTRPCRouter({
       return property;
     }),
 
-  
   getStats: protectedProcedure
     .input(
       z.object({
@@ -101,7 +118,13 @@ export const reviewRouter = createTRPCRouter({
         ...(dateTo && { createdAt: { lte: dateTo } }),
       };
 
-      const [totalReviews, approvedReviews, avgRating, channelStats, categoryStats] = await Promise.all([
+      const [
+        totalReviews,
+        approvedReviews,
+        avgRating,
+        channelStats,
+        categoryStats,
+      ] = await Promise.all([
         ctx.db.review.count({ where: whereClause }),
         ctx.db.review.count({ where: { ...whereClause, approved: true } }),
         ctx.db.review.aggregate({
@@ -120,24 +143,39 @@ export const reviewRouter = createTRPCRouter({
         }),
       ]);
 
-      
-      const categoryMap = new Map<string, { count: number; totalRating: number; name: string }>();
-      categoryStats.forEach((review: { rating: number; categories: Array<{ id: string; name: string }> }) => {
-        review.categories.forEach((category: { id: string; name: string }) => {
-          const existing = categoryMap.get(category.id) || { count: 0, totalRating: 0, name: category.name };
-          categoryMap.set(category.id, {
-            ...existing,
-            count: existing.count + 1,
-            totalRating: existing.totalRating + review.rating,
-          });
-        });
-      });
+      const categoryMap = new Map<
+        string,
+        { count: number; totalRating: number; name: string }
+      >();
+      categoryStats.forEach(
+        (review: {
+          rating: number;
+          categories: Array<{ id: string; name: string }>;
+        }) => {
+          review.categories.forEach(
+            (category: { id: string; name: string }) => {
+              const existing = categoryMap.get(category.id) || {
+                count: 0,
+                totalRating: 0,
+                name: category.name,
+              };
+              categoryMap.set(category.id, {
+                ...existing,
+                count: existing.count + 1,
+                totalRating: existing.totalRating + review.rating,
+              });
+            },
+          );
+        },
+      );
 
-      const processedCategoryStats = Array.from(categoryMap.values()).map((cat) => ({
-        name: cat.name,
-        count: cat.count,
-        avgRating: cat.totalRating / cat.count,
-      }));
+      const processedCategoryStats = Array.from(categoryMap.values()).map(
+        (cat) => ({
+          name: cat.name,
+          count: cat.count,
+          avgRating: cat.totalRating / cat.count,
+        }),
+      );
 
       return {
         totalReviews,
@@ -149,7 +187,6 @@ export const reviewRouter = createTRPCRouter({
       };
     }),
 
-  
   updateApproval: protectedProcedure
     .input(
       z.object({
@@ -164,7 +201,6 @@ export const reviewRouter = createTRPCRouter({
       });
     }),
 
-  
   bulkUpdateApproval: protectedProcedure
     .input(
       z.object({
@@ -179,7 +215,6 @@ export const reviewRouter = createTRPCRouter({
       });
     }),
 
-  
   getById: protectedProcedure
     .input(z.object({ id: z.string() }))
     .query(async ({ ctx, input }) => {

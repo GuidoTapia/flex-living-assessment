@@ -1,7 +1,16 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { Container, Paper, Title, Text, Button, Stack, Alert, Group } from "@mantine/core";
+import {
+  Container,
+  Paper,
+  Title,
+  Text,
+  Button,
+  Stack,
+  Alert,
+  Group,
+} from "@mantine/core";
 import { IconAlertCircle, IconArrowLeft } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -30,7 +39,8 @@ export default function AuthErrorPage() {
           </Alert>
 
           <Text size="sm" c="dimmed" ta="center">
-            Please try signing in again or contact support if the problem persists.
+            Please try signing in again or contact support if the problem
+            persists.
           </Text>
 
           <Group>

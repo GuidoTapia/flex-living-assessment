@@ -26,16 +26,18 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
             <div className="w-full md:w-96 h-64 bg-gray-200 rounded-lg flex items-center justify-center">
               <span className="text-gray-500 text-lg">Property Image</span>
             </div>
-            
+
             {/* Property Info */}
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{property.name}</h1>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                {property.name}
+              </h1>
               <p className="text-gray-600 text-lg mb-4">
                 {property.address && `${property.address}, `}
                 {property.city && `${property.city}, `}
                 {property.country}
               </p>
-              
+
               {/* Rating and Reviews Count */}
               <div className="flex items-center gap-4 mb-4">
                 <div className="flex items-center gap-1">
@@ -60,7 +62,8 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                   </span>
                 </div>
                 <div className="text-gray-600">
-                  <span className="font-medium">{property.reviews.length}</span> guest reviews
+                  <span className="font-medium">{property.reviews.length}</span>{" "}
+                  guest reviews
                 </div>
               </div>
 
@@ -97,13 +100,20 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
           {/* Reviews Section */}
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm border p-6">
-              <h2 className="text-2xl font-bold text-gray-900 mb-6">Guest Reviews</h2>
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                Guest Reviews
+              </h2>
               <div className="space-y-4">
                 {property.reviews.length === 0 ? (
-                  <p className="text-gray-500 text-center py-8">No reviews yet</p>
+                  <p className="text-gray-500 text-center py-8">
+                    No reviews yet
+                  </p>
                 ) : (
                   property.reviews.map((review) => (
-                    <div key={review.id} className="border-b border-gray-200 pb-4 last:border-b-0">
+                    <div
+                      key={review.id}
+                      className="border-b border-gray-200 pb-4 last:border-b-0"
+                    >
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -112,7 +122,9 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                             </span>
                           </div>
                           <div>
-                            <p className="font-medium text-sm">{review.authorName || "Anonymous Guest"}</p>
+                            <p className="font-medium text-sm">
+                              {review.authorName || "Anonymous Guest"}
+                            </p>
                             <p className="text-xs text-gray-500">
                               {new Date(review.createdAt).toLocaleDateString()}
                             </p>
@@ -133,11 +145,15 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                             </svg>
                           ))}
-                          <span className="ml-1 text-sm font-medium">{review.rating}</span>
+                          <span className="ml-1 text-sm font-medium">
+                            {review.rating}
+                          </span>
                         </div>
                       </div>
                       {review.title && (
-                        <h3 className="font-medium text-gray-900 mb-1">{review.title}</h3>
+                        <h3 className="font-medium text-gray-900 mb-1">
+                          {review.title}
+                        </h3>
                       )}
                       <p className="text-gray-700 text-sm">{review.body}</p>
                       <div className="flex items-center gap-2 mt-2">
@@ -145,7 +161,10 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                           {review.channel}
                         </span>
                         {review.categories.map((category, idx) => (
-                          <span key={idx} className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                          <span
+                            key={idx}
+                            className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded"
+                          >
                             {category.name}
                           </span>
                         ))}

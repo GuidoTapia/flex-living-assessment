@@ -68,15 +68,16 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
             About this property
           </Title>
           <Text size="sm" c="dimmed" lineClamp={4}>
-            Welcome to {property.name}, a beautifully designed property located in the heart of{" "}
-            {property.city}, {property.country}. This spacious accommodation offers modern amenities
-            and comfortable living spaces perfect for families, business travelers, and vacationers
-            alike.
+            Welcome to {property.name}, a beautifully designed property located
+            in the heart of {property.city}, {property.country}. This spacious
+            accommodation offers modern amenities and comfortable living spaces
+            perfect for families, business travelers, and vacationers alike.
           </Text>
           <Text size="sm" c="dimmed" mt="md">
-            Experience the perfect blend of comfort and convenience with our fully equipped facilities
-            and prime location. Whether you're here for business or leisure, our property provides
-            everything you need for a memorable stay.
+            Experience the perfect blend of comfort and convenience with our
+            fully equipped facilities and prime location. Whether you're here
+            for business or leisure, our property provides everything you need
+            for a memorable stay.
           </Text>
         </Card.Section>
       </Card>
@@ -122,21 +123,29 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
             {property.address && `${property.address}, `}
             {property.city}, {property.country}
           </Text>
-          
+
           {/* Map placeholder */}
           <div className="w-full h-64 bg-gray-200 rounded-lg flex items-center justify-center">
             <span className="text-gray-500">Interactive Map</span>
           </div>
-          
+
           <Stack gap="sm" mt="md">
             <Text size="sm" fw={500}>
               Popular landmarks nearby:
             </Text>
             <Group gap="sm">
-              <Badge variant="light" size="sm">City Center - 5 min walk</Badge>
-              <Badge variant="light" size="sm">Beach - 10 min drive</Badge>
-              <Badge variant="light" size="sm">Airport - 25 min drive</Badge>
-              <Badge variant="light" size="sm">Train Station - 8 min walk</Badge>
+              <Badge variant="light" size="sm">
+                City Center - 5 min walk
+              </Badge>
+              <Badge variant="light" size="sm">
+                Beach - 10 min drive
+              </Badge>
+              <Badge variant="light" size="sm">
+                Airport - 25 min drive
+              </Badge>
+              <Badge variant="light" size="sm">
+                Train Station - 8 min walk
+              </Badge>
             </Group>
           </Stack>
         </Card.Section>

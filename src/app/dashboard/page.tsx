@@ -25,19 +25,13 @@ import {
   Paper,
   SimpleGrid,
   ThemeIcon,
-  Alert,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { api } from "~/trpc/react";
 import {
   IconSearch,
-  IconFilter,
   IconEye,
-  IconEyeOff,
-  IconTrendingUp,
-  IconTrendingDown,
   IconStar,
-  IconCalendar,
   IconBuilding,
   IconMessageCircle,
   IconCheck,
@@ -58,42 +52,41 @@ export default function ManagerDashboard() {
   });
   const [selectedReviews, setSelectedReviews] = useState<string[]>([]);
 
-  
-  const { data: propertiesData, isLoading: propertiesLoading } = api.property.getAll.useQuery({
-    limit: 50,
-    search: filters.search,
-    ratingMin: filters.ratingMin,
-    dateFrom: filters.dateFrom || undefined,
-    dateTo: filters.dateTo || undefined,
-  });
+  const { data: propertiesData, isLoading: propertiesLoading } =
+    api.property.getAll.useQuery({
+      limit: 50,
+      search: filters.search,
+      ratingMin: filters.ratingMin,
+      dateFrom: filters.dateFrom || undefined,
+      dateTo: filters.dateTo || undefined,
+    });
 
-  
-  const { data: reviewsData, isLoading: reviewsLoading } = api.review.getAll.useQuery({
-    limit: 100,
-    propertyId: selectedProperty || undefined,
-    approved: filters.approved,
-    channel: filters.channel || undefined,
-    ratingMin: filters.ratingMin,
-    ratingMax: filters.ratingMax,
-    dateFrom: filters.dateFrom || undefined,
-    dateTo: filters.dateTo || undefined,
-  });
+  const { data: reviewsData, isLoading: reviewsLoading } =
+    api.review.getAll.useQuery({
+      limit: 100,
+      propertyId: selectedProperty || undefined,
+      approved: filters.approved,
+      channel: filters.channel || undefined,
+      ratingMin: filters.ratingMin,
+      ratingMax: filters.ratingMax,
+      dateFrom: filters.dateFrom || undefined,
+      dateTo: filters.dateTo || undefined,
+    });
 
-  
-  const { data: performanceData } = api.property.getPerformanceSummary.useQuery({
-    propertyId: selectedProperty || undefined,
-    dateFrom: filters.dateFrom || undefined,
-    dateTo: filters.dateTo || undefined,
-  });
+  const { data: performanceData } = api.property.getPerformanceSummary.useQuery(
+    {
+      propertyId: selectedProperty || undefined,
+      dateFrom: filters.dateFrom || undefined,
+      dateTo: filters.dateTo || undefined,
+    },
+  );
 
-  
   const { data: reviewStats } = api.review.getStats.useQuery({
     propertyId: selectedProperty || undefined,
     dateFrom: filters.dateFrom || undefined,
     dateTo: filters.dateTo || undefined,
   });
 
-  
   const updateApprovalMutation = api.review.updateApproval.useMutation({
     onSuccess: () => {
       notifications.show({
@@ -104,7 +97,6 @@ export default function ManagerDashboard() {
     },
   });
 
-  
   const bulkUpdateApprovalMutation = api.review.bulkUpdateApproval.useMutation({
     onSuccess: () => {
       setSelectedReviews([]);
@@ -118,8 +110,7 @@ export default function ManagerDashboard() {
 
   const { data: session, status } = useSession();
   const router = useRouter();
-  
-  
+
   useEffect(() => {
     console.log("Dashboard - Auth status:", status);
     console.log("Dashboard - Session:", !!session);
@@ -129,7 +120,6 @@ export default function ManagerDashboard() {
     }
   }, [status, router]);
 
-  
   if (status === "loading") {
     return (
       <Container size="xl" py="xl">
@@ -138,12 +128,9 @@ export default function ManagerDashboard() {
     );
   }
 
-  
   if (!session) {
     return null;
   }
-
-  
 
   const handleApprovalToggle = (reviewId: string, approved: boolean) => {
     updateApprovalMutation.mutate({ id: reviewId, approved });
@@ -166,7 +153,7 @@ export default function ManagerDashboard() {
     setSelectedReviews((prev) =>
       prev.includes(reviewId)
         ? prev.filter((id: string) => id !== reviewId)
-        : [...prev, reviewId]
+        : [...prev, reviewId],
     );
   };
 
@@ -180,13 +167,15 @@ export default function ManagerDashboard() {
 
   return (
     <Container size="xl" py="md">
-
       <Tabs defaultValue="overview">
         <Tabs.List>
           <Tabs.Tab value="overview" leftSection={<IconBuilding size={16} />}>
             Overview
           </Tabs.Tab>
-          <Tabs.Tab value="reviews" leftSection={<IconMessageCircle size={16} />}>
+          <Tabs.Tab
+            value="reviews"
+            leftSection={<IconMessageCircle size={16} />}
+          >
             Reviews
           </Tabs.Tab>
           <Tabs.Tab value="properties" leftSection={<IconBuilding size={16} />}>
@@ -284,7 +273,11 @@ export default function ManagerDashboard() {
                           </Text>
                         </Group>
                         <Progress
-                          value={(channel._count.channel / (reviewStats?.totalReviews || 1)) * 100}
+                          value={
+                            (channel._count.channel /
+                              (reviewStats?.totalReviews || 1)) *
+                            100
+                          }
                           size="sm"
                         />
                       </div>
@@ -311,7 +304,11 @@ export default function ManagerDashboard() {
                           </Text>
                         </Group>
                         <Progress
-                          value={(category.count / (reviewStats?.totalReviews || 1)) * 100}
+                          value={
+                            (category.count /
+                              (reviewStats?.totalReviews || 1)) *
+                            100
+                          }
                           size="sm"
                         />
                       </div>
@@ -336,7 +333,9 @@ export default function ManagerDashboard() {
                     placeholder="Search reviews..."
                     leftSection={<IconSearch size={16} />}
                     value={filters.search}
-                    onChange={(e) => setFilters({ ...filters, search: e.target.value })}
+                    onChange={(e) =>
+                      setFilters({ ...filters, search: e.target.value })
+                    }
                   />
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 2 }}>
@@ -349,7 +348,9 @@ export default function ManagerDashboard() {
                       { value: "google", label: "Google" },
                     ]}
                     value={filters.channel}
-                    onChange={(value) => setFilters({ ...filters, channel: value || "" })}
+                    onChange={(value) =>
+                      setFilters({ ...filters, channel: value || "" })
+                    }
                     clearable
                   />
                 </Grid.Col>
@@ -377,7 +378,13 @@ export default function ManagerDashboard() {
                     max={5}
                     step={0.1}
                     value={filters.ratingMin}
-                    onChange={(value) => setFilters({ ...filters, ratingMin: typeof value === 'number' ? value : undefined })}
+                    onChange={(value) =>
+                      setFilters({
+                        ...filters,
+                        ratingMin:
+                          typeof value === "number" ? value : undefined,
+                      })
+                    }
                   />
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 2 }}>
@@ -387,14 +394,22 @@ export default function ManagerDashboard() {
                     max={5}
                     step={0.1}
                     value={filters.ratingMax}
-                    onChange={(value) => setFilters({ ...filters, ratingMax: typeof value === 'number' ? value : undefined })}
+                    onChange={(value) =>
+                      setFilters({
+                        ...filters,
+                        ratingMax:
+                          typeof value === "number" ? value : undefined,
+                      })
+                    }
                   />
                 </Grid.Col>
                 <Grid.Col span={{ base: 12, md: 3 }}>
                   <DateInput
                     placeholder="From Date"
                     value={filters.dateFrom}
-                    onChange={(value) => setFilters({ ...filters, dateFrom: value as Date | null })}
+                    onChange={(value) =>
+                      setFilters({ ...filters, dateFrom: value as Date | null })
+                    }
                     clearable
                   />
                 </Grid.Col>
@@ -402,7 +417,9 @@ export default function ManagerDashboard() {
                   <DateInput
                     placeholder="To Date"
                     value={filters.dateTo}
-                    onChange={(value) => setFilters({ ...filters, dateTo: value as Date | null })}
+                    onChange={(value) =>
+                      setFilters({ ...filters, dateTo: value as Date | null })
+                    }
                     clearable
                   />
                 </Grid.Col>
@@ -416,7 +433,8 @@ export default function ManagerDashboard() {
               <Card.Section p="md">
                 <Group>
                   <Text fw={500}>
-                    {selectedReviews.length} review{selectedReviews.length > 1 ? "s" : ""} selected
+                    {selectedReviews.length} review
+                    {selectedReviews.length > 1 ? "s" : ""} selected
                   </Text>
                   <Button
                     size="xs"
@@ -458,12 +476,14 @@ export default function ManagerDashboard() {
                       <Table.Th>
                         <Checkbox
                           checked={
-                            selectedReviews.length === reviewsData?.reviews.length &&
+                            selectedReviews.length ===
+                              reviewsData?.reviews.length &&
                             reviewsData?.reviews.length > 0
                           }
                           indeterminate={
                             selectedReviews.length > 0 &&
-                            selectedReviews.length < (reviewsData?.reviews.length || 0)
+                            selectedReviews.length <
+                              (reviewsData?.reviews.length || 0)
                           }
                           onChange={handleSelectAll}
                         />
@@ -493,7 +513,9 @@ export default function ManagerDashboard() {
                           </Group>
                         </Table.Td>
                         <Table.Td>
-                          <Text size="sm">{review.authorName || "Anonymous"}</Text>
+                          <Text size="sm">
+                            {review.authorName || "Anonymous"}
+                          </Text>
                         </Table.Td>
                         <Table.Td>
                           <Badge size="sm" variant="light" tt="capitalize">
@@ -521,17 +543,26 @@ export default function ManagerDashboard() {
                         </Table.Td>
                         <Table.Td>
                           <Group gap="xs">
-                            <Tooltip label={review.approved ? "Reject" : "Approve"}>
+                            <Tooltip
+                              label={review.approved ? "Reject" : "Approve"}
+                            >
                               <ActionIcon
                                 color={review.approved ? "red" : "green"}
                                 variant="light"
                                 size="sm"
                                 onClick={() =>
-                                  handleApprovalToggle(review.id, !review.approved)
+                                  handleApprovalToggle(
+                                    review.id,
+                                    !review.approved,
+                                  )
                                 }
                                 loading={updateApprovalMutation.isPending}
                               >
-                                {review.approved ? <IconX size={14} /> : <IconCheck size={14} />}
+                                {review.approved ? (
+                                  <IconX size={14} />
+                                ) : (
+                                  <IconCheck size={14} />
+                                )}
                               </ActionIcon>
                             </Tooltip>
                           </Group>
@@ -567,12 +598,16 @@ export default function ManagerDashboard() {
                       <Text size="sm">Average Rating</Text>
                       <Group gap="xs">
                         <IconStar size={16} fill="gold" color="gold" />
-                        <Text fw={500}>{property.metrics.avgRating.toFixed(1)}</Text>
+                        <Text fw={500}>
+                          {property.metrics.avgRating.toFixed(1)}
+                        </Text>
                       </Group>
                     </Group>
                     <Group justify="space-between">
                       <Text size="sm">Approval Rate</Text>
-                      <Text fw={500}>{property.metrics.approvalRate.toFixed(1)}%</Text>
+                      <Text fw={500}>
+                        {property.metrics.approvalRate.toFixed(1)}%
+                      </Text>
                     </Group>
                     <Group justify="space-between">
                       <Text size="sm">Pending Reviews</Text>

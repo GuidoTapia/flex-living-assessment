@@ -1,12 +1,7 @@
 "use client";
 
-import {
-  AppShell,
-  Group,
-  Title,
-  Button,
-  Image,
-} from "@mantine/core";
+import { AppShell, Group, Title, Button, Image } from "@mantine/core";
+import { IconBuilding } from "@tabler/icons-react";
 import Link from "next/link";
 
 interface LayoutProps {
@@ -15,27 +10,25 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   return (
-    <AppShell
-      header={{ height: 88}}
-    >
+    <AppShell header={{ height: 88 }}>
       <AppShell.Header py={16} bg="light.0">
         <Group h="100%" px="md" justify="space-between">
           <Group>
             <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
               <Group gap="sm">
-                <Image
-                  src="/the-flex.webp"
-                  alt="The Flex"
-                  h={32}
-                  w="auto"
-                />
+                <Image src="/the-flex.webp" alt="The Flex" h={32} w="auto" />
               </Group>
             </Link>
           </Group>
 
           <Group>
-            <Button component={Link} href="/auth/signin" variant="filled" >
-              Sign In
+            <Button
+              component={Link}
+              href="/auth/signin"
+              variant="transparent"
+              leftSection={<IconBuilding size={16} />}
+            >
+              Manage Properties
             </Button>
           </Group>
         </Group>

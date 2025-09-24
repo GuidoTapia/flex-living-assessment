@@ -11,7 +11,8 @@ import { theme } from "~/styles/theme";
 
 export const metadata: Metadata = {
   title: "Flex Living Reviews System",
-  description: "Manage guest reviews and showcase your property's best features",
+  description:
+    "Manage guest reviews and showcase your property's best features",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 

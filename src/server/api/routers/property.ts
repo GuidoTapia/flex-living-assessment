@@ -1,8 +1,11 @@
 import { z } from "zod";
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 
 export const propertyRouter = createTRPCRouter({
-  
   getAll: protectedProcedure
     .input(
       z.object({
@@ -17,7 +20,16 @@ export const propertyRouter = createTRPCRouter({
       }),
     )
     .query(async ({ ctx, input }) => {
-      const { limit, cursor, search, city, country, ratingMin, dateFrom, dateTo } = input;
+      const {
+        limit,
+        cursor,
+        search,
+        city,
+        country,
+        ratingMin,
+        dateFrom,
+        dateTo,
+      } = input;
 
       const properties = await ctx.db.property.findMany({
         take: limit + 1,
@@ -65,31 +77,39 @@ export const propertyRouter = createTRPCRouter({
         nextCursor = nextItem?.id;
       }
 
-      
       const propertiesWithMetrics = properties.map((property: any) => {
         const reviews = property.reviews;
         const totalReviews = reviews.length;
         const approvedReviews = reviews.filter((r: any) => r.approved).length;
-        const avgRating = reviews.length > 0 ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) / reviews.length : 0;
-        
-        
-        const channelStats = reviews.reduce((acc: Record<string, number>, review: any) => {
-          acc[review.channel] = (acc[review.channel] || 0) + 1;
-          return acc;
-        }, {} as Record<string, number>);
+        const avgRating =
+          reviews.length > 0
+            ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) /
+              reviews.length
+            : 0;
 
-        
-        const categoryStats = reviews.reduce((acc: Record<string, number>, review: any) => {
-          review.categories.forEach((category: any) => {
-            acc[category.name] = (acc[category.name] || 0) + 1;
-          });
-          return acc;
-        }, {} as Record<string, number>);
+        const channelStats = reviews.reduce(
+          (acc: Record<string, number>, review: any) => {
+            acc[review.channel] = (acc[review.channel] || 0) + 1;
+            return acc;
+          },
+          {} as Record<string, number>,
+        );
 
-        
+        const categoryStats = reviews.reduce(
+          (acc: Record<string, number>, review: any) => {
+            review.categories.forEach((category: any) => {
+              acc[category.name] = (acc[category.name] || 0) + 1;
+            });
+            return acc;
+          },
+          {} as Record<string, number>,
+        );
+
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        const recentReviews = reviews.filter((r: any) => r.createdAt >= thirtyDaysAgo).length;
+        const recentReviews = reviews.filter(
+          (r: any) => r.createdAt >= thirtyDaysAgo,
+        ).length;
 
         return {
           ...property,
@@ -101,7 +121,8 @@ export const propertyRouter = createTRPCRouter({
             channelStats,
             categoryStats,
             recentReviews,
-            approvalRate: totalReviews > 0 ? (approvedReviews / totalReviews) * 100 : 0,
+            approvalRate:
+              totalReviews > 0 ? (approvedReviews / totalReviews) * 100 : 0,
           },
         };
       });
@@ -112,7 +133,6 @@ export const propertyRouter = createTRPCRouter({
       };
     }),
 
-  
   getBySlug: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ ctx, input }) => {
@@ -131,7 +151,6 @@ export const propertyRouter = createTRPCRouter({
       });
     }),
 
-  
   getPerformanceSummary: protectedProcedure
     .input(
       z.object({
@@ -149,7 +168,13 @@ export const propertyRouter = createTRPCRouter({
         ...(dateTo && { createdAt: { lte: dateTo } }),
       };
 
-      const [totalReviews, approvedReviews, avgRating, channelBreakdown, categoryBreakdown] = await Promise.all([
+      const [
+        totalReviews,
+        approvedReviews,
+        avgRating,
+        channelBreakdown,
+        categoryBreakdown,
+      ] = await Promise.all([
         ctx.db.review.count({ where: whereClause }),
         ctx.db.review.count({ where: { ...whereClause, approved: true } }),
         ctx.db.review.aggregate({
@@ -168,37 +193,46 @@ export const propertyRouter = createTRPCRouter({
         }),
       ]);
 
-      
-      const categoryMap = new Map<string, { count: number; totalRating: number }>();
-      categoryBreakdown.forEach((review: { rating: number; categories: Array<{ name: string }> }) => {
-        review.categories.forEach((category: { name: string }) => {
-          const existing = categoryMap.get(category.name) || { count: 0, totalRating: 0 };
-          categoryMap.set(category.name, {
-            count: existing.count + 1,
-            totalRating: existing.totalRating + review.rating,
+      const categoryMap = new Map<
+        string,
+        { count: number; totalRating: number }
+      >();
+      categoryBreakdown.forEach(
+        (review: { rating: number; categories: Array<{ name: string }> }) => {
+          review.categories.forEach((category: { name: string }) => {
+            const existing = categoryMap.get(category.name) || {
+              count: 0,
+              totalRating: 0,
+            };
+            categoryMap.set(category.name, {
+              count: existing.count + 1,
+              totalRating: existing.totalRating + review.rating,
+            });
           });
-        });
-      });
+        },
+      );
 
-      const processedCategoryBreakdown = Array.from(categoryMap.entries()).map(([name, data]) => ({
-        name,
-        count: data.count,
-        avgRating: data.totalRating / data.count,
-        percentage: totalReviews > 0 ? (data.count / totalReviews) * 100 : 0,
-      }));
+      const processedCategoryBreakdown = Array.from(categoryMap.entries()).map(
+        ([name, data]) => ({
+          name,
+          count: data.count,
+          avgRating: data.totalRating / data.count,
+          percentage: totalReviews > 0 ? (data.count / totalReviews) * 100 : 0,
+        }),
+      );
 
       return {
         totalReviews,
         approvedReviews,
         pendingReviews: totalReviews - approvedReviews,
         avgRating: avgRating._avg.rating || 0,
-        approvalRate: totalReviews > 0 ? (approvedReviews / totalReviews) * 100 : 0,
+        approvalRate:
+          totalReviews > 0 ? (approvedReviews / totalReviews) * 100 : 0,
         channelBreakdown,
         categoryBreakdown: processedCategoryBreakdown,
       };
     }),
 
-  
   create: protectedProcedure
     .input(
       z.object({
@@ -215,7 +249,6 @@ export const propertyRouter = createTRPCRouter({
       });
     }),
 
-  
   update: protectedProcedure
     .input(
       z.object({
@@ -235,7 +268,6 @@ export const propertyRouter = createTRPCRouter({
       });
     }),
 
-  
   delete: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

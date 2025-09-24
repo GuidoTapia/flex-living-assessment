@@ -46,39 +46,51 @@ interface ReviewsSectionProps {
   propertyName: string;
 }
 
-export default function ReviewsSection({ reviews, propertyName }: ReviewsSectionProps) {
-  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "rating">("newest");
+export default function ReviewsSection({
+  reviews,
+  propertyName,
+}: ReviewsSectionProps) {
+  const [sortBy, setSortBy] = useState<"newest" | "oldest" | "rating">(
+    "newest",
+  );
   const [filterChannel, setFilterChannel] = useState<string>("");
   const [filterRating, setFilterRating] = useState<number | null>(null);
   const [selectedReview, setSelectedReview] = useState<Review | null>(null);
   const [opened, { open, close }] = useDisclosure(false);
 
-  
-  const averageRating = reviews.length > 0 
-    ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length 
-    : 0;
+  const averageRating =
+    reviews.length > 0
+      ? reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length
+      : 0;
 
-  const ratingDistribution = [5, 4, 3, 2, 1].map(rating => ({
+  const ratingDistribution = [5, 4, 3, 2, 1].map((rating) => ({
     rating,
-    count: reviews.filter(r => Math.round(r.rating) === rating).length,
-    percentage: reviews.length > 0 
-      ? (reviews.filter(r => Math.round(r.rating) === rating).length / reviews.length) * 100 
-      : 0,
+    count: reviews.filter((r) => Math.round(r.rating) === rating).length,
+    percentage:
+      reviews.length > 0
+        ? (reviews.filter((r) => Math.round(r.rating) === rating).length /
+            reviews.length) *
+          100
+        : 0,
   }));
 
-  
   const filteredAndSortedReviews = reviews
-    .filter(review => {
+    .filter((review) => {
       if (filterChannel && review.channel !== filterChannel) return false;
-      if (filterRating && Math.round(review.rating) !== filterRating) return false;
+      if (filterRating && Math.round(review.rating) !== filterRating)
+        return false;
       return true;
     })
     .sort((a, b) => {
       switch (sortBy) {
         case "newest":
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          return (
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          );
         case "oldest":
-          return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+          return (
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
         case "rating":
           return b.rating - a.rating;
         default:
@@ -122,12 +134,14 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
           {/* Average Rating */}
           <Group gap="md" mb="md">
             <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900">{averageRating.toFixed(1)}</div>
+              <div className="text-4xl font-bold text-gray-900">
+                {averageRating.toFixed(1)}
+              </div>
               <Group justify="center" gap="xs" mt="xs">
                 {renderStars(Math.round(averageRating))}
               </Group>
             </div>
-            
+
             {/* Rating Distribution */}
             <div className="flex-1">
               <Stack gap="xs">
@@ -170,11 +184,13 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                   { value: "rating", label: "Highest rating" },
                 ]}
                 value={sortBy}
-                onChange={(value) => setSortBy(value as "newest" | "oldest" | "rating")}
+                onChange={(value) =>
+                  setSortBy(value as "newest" | "oldest" | "rating")
+                }
                 leftSection={<IconSortAscending size={16} />}
               />
             </Group>
-            
+
             <Group grow>
               <Select
                 placeholder="Filter by channel"
@@ -189,7 +205,7 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                 clearable
                 leftSection={<IconFilter size={16} />}
               />
-              
+
               <Select
                 placeholder="Filter by rating"
                 data={[
@@ -200,7 +216,9 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                   { value: "1", label: "1 star" },
                 ]}
                 value={filterRating?.toString()}
-                onChange={(value) => setFilterRating(value ? parseInt(value) : null)}
+                onChange={(value) =>
+                  setFilterRating(value ? parseInt(value) : null)
+                }
                 clearable
               />
             </Group>
@@ -214,7 +232,7 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
           <Title order={4} mb="md">
             Guest Reviews ({filteredAndSortedReviews.length})
           </Title>
-          
+
           <Stack gap="md">
             {filteredAndSortedReviews.length === 0 ? (
               <Text c="dimmed" ta="center" py="xl">
@@ -241,7 +259,7 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                           </Text>
                         </div>
                       </Group>
-                      
+
                       <Group gap="xs">
                         <Badge size="sm" variant="light" tt="capitalize">
                           {review.channel}
@@ -254,17 +272,17 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                         </Group>
                       </Group>
                     </Group>
-                    
+
                     {review.title && (
                       <Text size="sm" fw={500} mb="xs">
                         {review.title}
                       </Text>
                     )}
-                    
+
                     <Text size="sm" c="dimmed" lineClamp={2}>
                       {review.body}
                     </Text>
-                    
+
                     {review.categories.length > 0 && (
                       <Group gap="xs" mt="xs">
                         {review.categories.map((category, idx) => (
@@ -275,8 +293,10 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                       </Group>
                     )}
                   </div>
-                  
-                  {index < filteredAndSortedReviews.length - 1 && <Divider mt="md" />}
+
+                  {index < filteredAndSortedReviews.length - 1 && (
+                    <Divider mt="md" />
+                  )}
                 </div>
               ))
             )}
@@ -285,12 +305,7 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
       </Card>
 
       {/* Review Detail Modal */}
-      <Modal
-        opened={opened}
-        onClose={close}
-        title="Review Details"
-        size="lg"
-      >
+      <Modal opened={opened} onClose={close} title="Review Details" size="lg">
         {selectedReview && (
           <Stack gap="md">
             <Group justify="space-between">
@@ -313,24 +328,24 @@ export default function ReviewsSection({ reviews, propertyName }: ReviewsSection
                   </Group>
                 </div>
               </Group>
-              
+
               <Badge size="lg" variant="light" tt="capitalize">
                 {selectedReview.channel}
               </Badge>
             </Group>
-            
+
             <Divider />
-            
+
             {selectedReview.title && (
               <Text fw={500} size="lg">
                 {selectedReview.title}
               </Text>
             )}
-            
+
             <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
               {selectedReview.body}
             </Text>
-            
+
             {selectedReview.categories.length > 0 && (
               <div>
                 <Text size="sm" fw={500} mb="xs">
