@@ -1,70 +1,102 @@
-import Link from "next/link";
+import { Container, Card, Text, Title, Button, Group, ThemeIcon, Badge, Stack, CardSection, TextInput, NumberInput, Paper, Flex, BackgroundImage, Box, Select } from "@mantine/core";
+import { IconChartBar, IconHome, IconMessageCircle, IconTrendingUp, IconSearch, IconCalendar, IconUsers, IconMapPin } from "@tabler/icons-react";
+import { DatePickerInput } from '@mantine/dates';
 
-import { LatestPost } from "~/app/_components/post";
+import Link from "next/link";
 import { auth } from "~/server/auth";
 import { api, HydrateClient } from "~/trpc/server";
-import styles from "./index.module.css";
+import Layout from "./_components/layout";
 
 export default async function Home() {
   const hello = await api.post.hello({ text: "from tRPC" });
   const session = await auth();
 
-  if (session?.user) {
-    void api.post.getLatest.prefetch();
-  }
-
   return (
     <HydrateClient>
-      <main className={styles.main}>
-        <div className={styles.container}>
-          <h1 className={styles.title}>
-            Create <span className={styles.pinkSpan}>T3</span> App
-          </h1>
-          <div className={styles.cardRow}>
-            <Link
-              className={styles.card}
-              href="https://create.t3.gg/en/usage/first-steps"
-              target="_blank"
-            >
-              <h3 className={styles.cardTitle}>First Steps →</h3>
-              <div className={styles.cardText}>
-                Just the basics - Everything you need to know to set up your
-                database and authentication.
-              </div>
-            </Link>
-            <Link
-              className={styles.card}
-              href="https://create.t3.gg/en/introduction"
-              target="_blank"
-            >
-              <h3 className={styles.cardTitle}>Documentation →</h3>
-              <div className={styles.cardText}>
-                Learn more about Create T3 App, the libraries it uses, and how
-                to deploy it.
-              </div>
-            </Link>
-          </div>
-          <div className={styles.showcaseContainer}>
-            <p className={styles.showcaseText}>
-              {hello ? hello.greeting : "Loading tRPC query..."}
-            </p>
+        <Layout>
+          {/* Hero Section with Background */}
+          <BackgroundImage
+            src='/Hero_Desktop_Large.webp'
+            h="100%"
+            
+          > 
+          <Flex h='100%' w='100%' justify='center' align='center'>
+           
+            
+            {/* Hero Content */}
+            <Container  w='100%' px='xxl'
+            maw='1400px'>
+               <Box mb='xxl'>
+                 <Title order={1} c="white" fw={700} mb="sm">
+                   Book
+                 </Title>
+                 <Title order={1} c="white"fw={700}>
+                   Beautiful Stays
+                 </Title>
+               </Box>
 
-            <div className={styles.authContainer}>
-              <p className={styles.showcaseText}>
-                {session && <span>Logged in as {session.user?.name}</span>}
-              </p>
-              <Link
-                href={session ? "/api/auth/signout" : "/api/auth/signin"}
-                className={styles.loginButton}
-              >
-                {session ? "Sign out" : "Sign in"}
-              </Link>
-            </div>
-          </div>
+              <Paper shadow="xxl" p="lg" radius="xl" w='100%' bg="light.0">
+                <Flex 
+                  direction={{ base: "column", sm: "row" }} 
+                  gap="lg" 
+                  align={{ base: "stretch", sm: "end" }}
+                >
+                  <Select
+                    placeholder="Where are you going?"
+                    leftSection={<IconMapPin size={18} />}
+                    size="lg"
+                    radius="lg"
+                    style={{ flex: 1 }}
+                    data={[
+                      { value: "London", label: "London, UK" },
+                      { value: "Paris", label: "Paris, France" },
+                      { value: "Algiers", label: "Algiers, Algeria" },
+                      { value: "Lisbon", label: "Lisbon, Portugal" },
+                    ]}
+                    
+                    variant="unstyled"
+                  />
+                  <DatePickerInput
+                    placeholder="Dates"
+                    leftSection={<IconCalendar size={18} />}
+                    
+                    size="lg"
+                    radius="lg"
+                    style={{ flex: 1 }}
+                    
+                    type="range"
+                    variant="unstyled"
+                    color="brand"
+                    c="brand"
+                  />
+                  <NumberInput
+                    placeholder="Guests"
+                    leftSection={<IconUsers size={18} />}
+                    size="lg"
+                    radius="lg"
+                    min={1}
+                    max={20}
+                    variant="unstyled"
+                    defaultValue={1}
 
-          {session?.user && <LatestPost />}
-        </div>
-      </main>
-    </HydrateClient>
-  );
-}
+                    
+                  />
+                  <Button 
+                    size="lg" 
+                    color="brand"
+                    radius="lg"
+                    style={{ minWidth: "140px" }}
+                    fw={600}
+                  >
+                    Search
+                  </Button>
+                </Flex>
+              </Paper>
+              
+            </Container>
+            </Flex>
+          </BackgroundImage>
+        </Layout>
+      </HydrateClient>
+    );
+  }

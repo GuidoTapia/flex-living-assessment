@@ -60,6 +60,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    password      String?
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
@@ -73,6 +74,21 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+model Property {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  address     String?
+  city        String?
+  country     String?
+  ratingAvg   Float     @default(0)
+  reviews     Review[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+
 model Listing {
   id         String   @id @default(cuid())
   externalId String   @unique                 // Hostaway listingId or slug of listingName
@@ -85,18 +101,24 @@ model Listing {
   updatedAt  DateTime @updatedAt
 }
 
+model Category {
+  id      String   @id @default(cuid())
+  name    String   @unique  // e.g., "Cleanliness", "Location", "Staff", "Noise"
+  reviews Review[] @relation("ReviewCategories")
+}
+
 model Review {
   id           String   @id @default(cuid())
 
-  // Source system and its external identifier
   source       String                      // 'hostaway' | 'google'
   externalId   String                      // e.g., Hostaway review id
 
-  // Relations
   listingId    String
   listing      Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
 
-  // Normalized review fields
+  propertyId   String?
+  property     Property? @relation(fields: [propertyId], references: [id], onDelete: SetNull)
+
   reviewType   String                      // 'host_to_guest' | 'guest_to_host' | 'public' | ...
   channel      String                      // 'airbnb' | 'booking' | 'direct' | 'google' | 'unknown'
   rating       Float
@@ -104,7 +126,7 @@ model Review {
   body         String
   authorName   String?
   language     String?
-  categories   Json?                       // flattened categories map (e.g., {cleanliness:10})
+  categories   Category[] @relation("ReviewCategories")
 
   // Timestamps & publishing
   createdAt    DateTime                    // from submittedAt (UTC)
@@ -114,4 +136,5 @@ model Review {
   @@unique([externalId, source], name: "externalId_source")
   @@index([listingId, createdAt])
   @@index([source, createdAt])
+  @@index([propertyId, createdAt])
 }
