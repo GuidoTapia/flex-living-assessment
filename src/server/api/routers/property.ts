@@ -6,6 +6,126 @@ import {
 } from "~/server/api/trpc";
 
 export const propertyRouter = createTRPCRouter({
+  // Public search endpoint for properties with only approved reviews
+  search: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).default(20),
+        cursor: z.string().nullish(),
+        search: z.string().optional(),
+        city: z.string().optional(),
+        country: z.string().optional(),
+        ratingMin: z.number().min(1).max(5).optional(),
+        priceMin: z.number().min(0).optional(),
+        priceMax: z.number().min(0).optional(),
+        guests: z.number().min(1).optional(),
+        bedrooms: z.number().min(1).optional(),
+        bathrooms: z.number().min(1).optional(),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const {
+        limit,
+        cursor,
+        search,
+        city,
+        country,
+        ratingMin,
+        priceMin,
+        priceMax,
+        guests,
+        bedrooms,
+        bathrooms,
+      } = input;
+
+      const properties = await ctx.db.property.findMany({
+        take: limit + 1,
+        cursor: cursor ? { id: cursor } : undefined,
+        where: {
+          ...(search && {
+            OR: [
+              { name: { contains: search } },
+              { address: { contains: search } },
+              { city: { contains: search } },
+            ],
+          }),
+          ...(city && { city: { contains: city } }),
+          ...(country && { country: { contains: country } }),
+          ...(ratingMin && { ratingAvg: { gte: ratingMin } }),
+          ...(priceMin && { price: { gte: priceMin } }),
+          ...(priceMax && { price: { lte: priceMax } }),
+          ...(guests && { guests: { gte: guests } }),
+          ...(bedrooms && { bedrooms: { gte: bedrooms } }),
+          ...(bathrooms && { bathrooms: { gte: bathrooms } }),
+        },
+        select: {
+          id: true,
+          slug: true,
+          name: true,
+          address: true,
+          city: true,
+          country: true,
+          ratingAvg: true,
+          price: true,
+          bedrooms: true,
+          bathrooms: true,
+          guests: true,
+          image: true,
+          createdAt: true,
+          updatedAt: true,
+          reviews: {
+            where: { approved: true },
+            select: {
+              id: true,
+              rating: true,
+              title: true,
+              body: true,
+              authorName: true,
+              createdAt: true,
+              channel: true,
+            },
+            orderBy: { createdAt: "desc" },
+          },
+          _count: {
+            select: {
+              reviews: {
+                where: { approved: true },
+              },
+            },
+          },
+        },
+        orderBy: { updatedAt: "desc" },
+      });
+
+      let nextCursor: typeof cursor | undefined = undefined;
+      if (properties.length > limit) {
+        const nextItem = properties.pop();
+        nextCursor = nextItem?.id;
+      }
+
+      // Calculate average rating from approved reviews only
+      const propertiesWithMetrics = properties.map((property) => {
+        const approvedReviews = property.reviews;
+        const totalReviews = approvedReviews.length;
+        const avgRating =
+          totalReviews > 0
+            ? approvedReviews.reduce((sum, review) => sum + review.rating, 0) /
+              totalReviews
+            : 0;
+
+        return {
+          ...property,
+          ratingAvg: avgRating,
+          reviewCount: totalReviews,
+        };
+      });
+
+      return {
+        properties: propertiesWithMetrics,
+        nextCursor,
+      };
+    }),
+
   getAll: protectedProcedure
     .input(
       z.object({
@@ -37,9 +157,9 @@ export const propertyRouter = createTRPCRouter({
         where: {
           ...(search && {
             OR: [
-              { name: { contains: search, mode: "insensitive" } },
-              { address: { contains: search, mode: "insensitive" } },
-              { city: { contains: search, mode: "insensitive" } },
+              { name: { contains: search } },
+              { address: { contains: search } },
+              { city: { contains: search } },
             ],
           }),
           ...(city && { city }),

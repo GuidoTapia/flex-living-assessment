@@ -93,6 +93,7 @@ export const theme = createTheme({
       "#18181b",
     ],
     light: [
+      "#fffdf6",
       "#fff9e9",
       "#fdf2d5",
       "#fde4a4",
@@ -154,12 +155,12 @@ export const theme = createTheme({
         lineHeight: "1",
       },
       h4: {
-        fontSize: "1.5rem",
+        fontSize: "1.75rem",
         fontWeight: "700",
         lineHeight: "1",
       },
       h5: {
-        fontSize: "1rem",
+        fontSize: "1.25rem",
         fontWeight: "700",
         lineHeight: "1",
       },

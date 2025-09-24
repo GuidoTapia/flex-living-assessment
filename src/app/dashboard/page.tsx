@@ -38,6 +38,7 @@ import {
   IconX,
 } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
+import Layout from "../_components/layout";
 
 export default function ManagerDashboard() {
   const [selectedProperty, setSelectedProperty] = useState<string>("");
@@ -166,6 +167,7 @@ export default function ManagerDashboard() {
   }
 
   return (
+    <Layout logOut>
     <Container size="xl" py="md">
       <Tabs defaultValue="overview">
         <Tabs.List>
@@ -637,5 +639,6 @@ export default function ManagerDashboard() {
         </Tabs.Panel>
       </Tabs>
     </Container>
+    </Layout> 
   );
 }

@@ -82,6 +82,11 @@ model Property {
   city        String?
   country     String?
   ratingAvg   Float     @default(0)
+  price       Float?    // Price per night
+  bedrooms    Int?      // Number of bedrooms
+  bathrooms   Int?      // Number of bathrooms
+  guests      Int?      // Maximum number of guests
+  image       String?   // Property image URL
   reviews     Review[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
