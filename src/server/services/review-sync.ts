@@ -59,7 +59,10 @@ export class ReviewSyncService {
 
     const listing = await this.findOrCreateListing(normalizedReview);
 
-    const property = await this.findMatchingProperty(hostawayReview, listing);
+    const property = await this.findMatchingProperty(
+      hostawayReview,
+      { ...listing, channel: listing.channel ?? "" }
+    );
 
     await prisma.review.upsert({
       where: {

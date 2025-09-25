@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   Title,
@@ -22,7 +22,7 @@ import { api } from "~/trpc/react";
 import { DatePickerInput } from "@mantine/dates";
 import cities from "../shared/cities";
 
-export default function PropertiesPage() {
+function PropertiesContent() {
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState({
     city: searchParams.get("city") ?? "",
@@ -149,5 +149,13 @@ export default function PropertiesPage() {
         )}
       </Box>
     </Layout>
+  );
+}
+
+export default function PropertiesPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PropertiesContent />
+    </Suspense>
   );
 }

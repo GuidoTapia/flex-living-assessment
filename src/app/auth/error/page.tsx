@@ -1,6 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 import {
   Container,
   Paper,
@@ -21,7 +22,7 @@ const errorMessages: Record<string, string> = {
   Default: "An error occurred during authentication.",
 };
 
-export default function AuthErrorPage() {
+function AuthErrorContent() {
   const searchParams = useSearchParams();
   const error = searchParams.get("error") ?? "Default";
   const errorMessage = errorMessages[error] ?? errorMessages.Default;
@@ -59,5 +60,13 @@ export default function AuthErrorPage() {
         </Stack>
       </Paper>
     </Container>
+  );
+}
+
+export default function AuthErrorPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <AuthErrorContent />
+    </Suspense>
   );
 }

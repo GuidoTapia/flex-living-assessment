@@ -96,7 +96,7 @@ export async function searchPlaces(
     const [lat, lng] = location.split(",").map(Number);
     requestBody.locationBias = {
       circle: {
-        center: { latitude: lat, longitude: lng },
+        center: { latitude: lat ?? 0, longitude: lng ?? 0 },
         radius: 50000, // 50km radius
       },
     };
