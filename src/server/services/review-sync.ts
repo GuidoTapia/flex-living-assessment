@@ -70,7 +70,7 @@ export class ReviewSyncService {
       },
       update: {
         listingId: listing.id,
-        propertyId: property?.id || null,
+        propertyId: property?.id ?? null,
         reviewType: normalizedReview.reviewType,
         channel: normalizedReview.channel,
         rating: normalizedReview.rating,
@@ -84,25 +84,23 @@ export class ReviewSyncService {
       create: {
         ...normalizedReview,
         listingId: listing.id,
-        propertyId: property?.id || null,
+        propertyId: property?.id ?? null,
       },
     });
   }
 
-  private async findOrCreateListing(normalizedReview: any) {
+  private async findOrCreateListing(normalizedReview: { listingId: string; channel: string }) {
     let listing = await prisma.listing.findFirst({
       where: { externalId: normalizedReview.listingId },
     });
 
-    if (!listing) {
-      listing = await prisma.listing.create({
-        data: {
-          externalId: normalizedReview.listingId,
-          name: `Hostaway Listing ${normalizedReview.listingId}`,
-          channel: normalizedReview.channel,
-        },
-      });
-    }
+    listing ??= await prisma.listing.create({
+      data: {
+        externalId: normalizedReview.listingId,
+        name: `Hostaway Listing ${normalizedReview.listingId}`,
+        channel: normalizedReview.channel,
+      },
+    });
 
     return listing;
   }
@@ -112,8 +110,8 @@ export class ReviewSyncService {
    * This is a basic implementation - you might want to enhance this based on your business logic
    */
   private async findMatchingProperty(
-    hostawayReview: HostawayReview,
-    listing: any,
+    _hostawayReview: HostawayReview,
+    _listing: { id: string; externalId: string; name: string; channel: string },
   ) {
     const property = await prisma.property.findFirst({
       where: {},

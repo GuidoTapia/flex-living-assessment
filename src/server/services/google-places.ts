@@ -22,9 +22,6 @@ interface Place {
   priceLevel?: string;
 }
 
-interface SearchTextResponse {
-  places: Place[];
-}
 
 // Legacy interfaces for backward compatibility
 interface GooglePlaceDetails {
@@ -55,7 +52,7 @@ interface GooglePlaceSearchResult {
   businessStatus?: string | null;
 }
 
-const apiKey = env.GOOGLE_PLACES_API_KEY || "";
+const apiKey = env.GOOGLE_PLACES_API_KEY ?? "";
 
 if (!apiKey) {
   console.warn(
@@ -81,7 +78,16 @@ export async function searchPlaces(
     throw new Error("Google Places API key not configured");
   }
 
-  const requestBody: any = {
+  const requestBody: {
+    textQuery: string;
+    maxResultCount: number;
+    locationBias?: {
+      circle: {
+        center: { latitude: number; longitude: number };
+        radius: number;
+      };
+    };
+  } = {
     textQuery: query,
     maxResultCount: 10,
   };
@@ -121,7 +127,7 @@ export async function searchPlaces(
       );
     }
 
-    const data = await response.json();
+    const data = await response.json() as { places?: Place[] };
     console.log("Response:", data);
 
     if (!data.places || data.places.length === 0) {
@@ -130,19 +136,19 @@ export async function searchPlaces(
     }
 
     // Transform the response to our expected format
-    const transformedPlaces = data.places.map((place: any) => {
+    const transformedPlaces = data.places.map((place: Place) => {
       console.log("Transforming place:", place);
       console.log("Place rating:", place.rating);
       console.log("Place userRatingCount:", place.userRatingCount);
       return {
-        place_id: place.id || "",
-        name: place.displayName?.text || "",
-        rating: place.rating || 0,
-        user_ratings_total: place.userRatingCount || 0,
-        vicinity: place.formattedAddress || "",
-        types: place.types || [],
-        priceLevel: place.priceLevel || null,
-        businessStatus: place.businessStatus || null,
+        place_id: place.id ?? "",
+        name: place.displayName?.text ?? "",
+        rating: place.rating ?? 0,
+        user_ratings_total: place.userRatingCount ?? 0,
+        vicinity: place.formattedAddress ?? "",
+        types: place.types ?? [],
+        priceLevel: place.priceLevel ?? null,
+        businessStatus: place.businessStatus ?? null,
       };
     });
 
@@ -188,7 +194,7 @@ export async function getPlaceDetails(
       );
     }
 
-    const place = await response.json();
+    const place = await response.json() as Place;
 
     if (!place) {
       return null;
@@ -196,21 +202,15 @@ export async function getPlaceDetails(
 
     // Transform the response to our expected format
     return {
-      place_id: place.id || "",
-      name: place.displayName?.text || "",
-      rating: place.rating || 0,
-      user_ratings_total: place.userRatingCount || 0,
-      formatted_address: place.formattedAddress || "",
-      website: place.websiteUri || undefined,
-      formatted_phone_number: place.nationalPhoneNumber || undefined,
-      photos:
-        place.photos?.map((photo: any) => ({
-          photo_reference: photo.name,
-          height: photo.heightPx || 0,
-          width: photo.widthPx || 0,
-        })) || [],
-      business_status: place.businessStatus?.toString() || "OPERATIONAL",
-      types: place.types || [],
+      place_id: place.id ?? "",
+      name: place.displayName?.text ?? "",
+      rating: place.rating ?? 0,
+      user_ratings_total: place.userRatingCount ?? 0,
+      formatted_address: place.formattedAddress ?? "",
+      website: place.websiteUri ?? undefined,
+      formatted_phone_number: place.nationalPhoneNumber ?? undefined,
+      business_status: place.businessStatus?.toString() ?? "OPERATIONAL",
+      types: place.types ?? [],
     };
   } catch (error) {
     console.error("Error getting place details:", error);
@@ -249,12 +249,12 @@ export function normalizePlaceData(place: GooglePlaceDetails) {
     googlePlaceId: place.place_id,
     name: place.name,
     address: place.formatted_address,
-    rating: place.rating || 0,
-    totalRatings: place.user_ratings_total || 0,
-    website: place.website || null,
-    phoneNumber: place.formatted_phone_number || null,
-    businessStatus: place.business_status || "OPERATIONAL",
-    types: place.types || [],
+    rating: place.rating ?? 0,
+    totalRatings: place.user_ratings_total ?? 0,
+    website: place.website ?? null,
+    phoneNumber: place.formatted_phone_number ?? null,
+    businessStatus: place.business_status ?? "OPERATIONAL",
+    types: place.types ?? [],
   };
 }
 

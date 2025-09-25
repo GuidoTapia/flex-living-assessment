@@ -72,7 +72,7 @@ export default function SignInPage() {
         router.push("/dashboard");
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setError("An unexpected error occurred");
       notifications.show({
         title: "Error",

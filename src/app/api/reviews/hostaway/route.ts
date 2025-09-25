@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { hostawayService } from "~/server/services/hostaway";
 import { db as prisma } from "~/server/db";
 
@@ -46,15 +46,13 @@ export async function GET(request: NextRequest) {
             where: { externalId: review.listingId },
           });
 
-          if (!listing) {
-            listing = await prisma.listing.create({
-              data: {
-                externalId: review.listingId,
-                name: `Hostaway Listing ${review.listingId}`,
-                channel: review.channel,
-              },
-            });
-          }
+          listing ??= await prisma.listing.create({
+            data: {
+              externalId: review.listingId,
+              name: `Hostaway Listing ${review.listingId}`,
+              channel: review.channel,
+            },
+          });
 
           const property = await prisma.property.findFirst({
             where: {

@@ -13,8 +13,6 @@ import {
   Button,
   Group,
   Select,
-  TextInput,
-  NumberInput,
   Stack,
   Table,
   Checkbox,
@@ -28,7 +26,6 @@ import {
 } from "@mantine/core";
 import { api } from "~/trpc/react";
 import {
-  IconSearch,
   IconEye,
   IconStar,
   IconBuilding,
@@ -40,7 +37,7 @@ import { notifications } from "@mantine/notifications";
 import Layout from "../_components/layout";
 
 export default function ManagerDashboard() {
-  const [selectedProperty, setSelectedProperty] = useState<string>("");
+  const [selectedProperty] = useState<string>("");
   const [filters, setFilters] = useState({
     search: "",
     channel: "",
@@ -72,14 +69,6 @@ export default function ManagerDashboard() {
       dateFrom: filters.dateFrom ?? undefined,
       dateTo: filters.dateTo ?? undefined,
     });
-
-  const { data: performanceData } = api.property.getPerformanceSummary.useQuery(
-    {
-      propertyId: selectedProperty ?? undefined,
-      dateFrom: filters.dateFrom ?? undefined,
-      dateTo: filters.dateTo ?? undefined,
-    },
-  );
 
   const { data: reviewStats } = api.review.getStats.useQuery({
     propertyId: selectedProperty ?? undefined,
@@ -113,7 +102,6 @@ export default function ManagerDashboard() {
 
   useEffect(() => {
     console.log("Dashboard - Auth status:", status);
-    console.log("Dashboard - Session:", !!session);
     if (status === "unauthenticated") {
       console.log("Dashboard - Redirecting to sign in");
       router.push("/auth/signin");

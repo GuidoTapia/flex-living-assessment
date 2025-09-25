@@ -33,14 +33,14 @@ interface HostawayReviewsResponse {
 
 class HostawayService {
   private accessToken: string | null = null;
-  private tokenExpiry: number = 0;
+  private tokenExpiry = 0;
   private readonly baseUrl = "https://api.hostaway.com/v1";
   private readonly accountId: string;
   private readonly apiKey: string;
 
   constructor() {
-    this.accountId = env.HOSTAWAY_ACCOUNT_ID || "";
-    this.apiKey = env.HOSTAWAY_API_KEY || "";
+    this.accountId = env.HOSTAWAY_ACCOUNT_ID ?? "";
+    this.apiKey = env.HOSTAWAY_API_KEY ?? "";
     
     if (!this.accountId || !this.apiKey) {
       console.warn("Hostaway API credentials not found. Hostaway integration will be disabled.");
@@ -90,7 +90,7 @@ class HostawayService {
       );
     }
 
-    const tokenData: HostawayAccessToken = await response.json();
+    const tokenData = await response.json() as HostawayAccessToken;
 
     this.accessToken = tokenData.access_token;
     this.tokenExpiry = now + tokenData.expires_in * 1000;
@@ -130,7 +130,7 @@ class HostawayService {
       );
     }
 
-    return await response.json();
+    return await response.json() as HostawayReviewsResponse;
   }
 
   /**
@@ -138,7 +138,7 @@ class HostawayService {
    */
   normalizeReview(hostawayReview: HostawayReview) {
     const averageRating =
-      hostawayReview.rating ||
+      hostawayReview.rating ??
       (hostawayReview.reviewCategory.length > 0
         ? hostawayReview.reviewCategory.reduce(
             (sum, cat) => sum + cat.rating,
@@ -156,7 +156,7 @@ class HostawayService {
       rating: averageRating,
       title: null,
       body: hostawayReview.publicReview,
-      authorName: hostawayReview.guestName || null,
+      authorName: hostawayReview.guestName ?? null,
       language: "en",
       createdAt: new Date(hostawayReview.submittedAt),
       approved: hostawayReview.status === "published",
@@ -175,7 +175,7 @@ class HostawayService {
       public: "public",
     };
 
-    return typeMap[type] || "guest_to_host";
+    return typeMap[type] ?? "guest_to_host";
   }
 
   /**
@@ -191,7 +191,7 @@ class HostawayService {
       TripAdvisor: "tripadvisor",
     };
 
-    return channelMap[channelName] || "unknown";
+    return channelMap[channelName] ?? "unknown";
   }
 
   /**
