@@ -102,8 +102,8 @@ export async function searchPlaces(
     };
   }
 
-  console.log("Searching places with query:", query);
-  console.log("Request:", requestBody);
+  
+  
 
   try {
     const response = await fetch(
@@ -128,18 +128,18 @@ export async function searchPlaces(
     }
 
     const data = await response.json() as { places?: Place[] };
-    console.log("Response:", data);
+    
 
     if (!data.places || data.places.length === 0) {
-      console.log("No places found in response");
+      
       return [];
     }
 
     // Transform the response to our expected format
     const transformedPlaces = data.places.map((place: Place) => {
-      console.log("Transforming place:", place);
-      console.log("Place rating:", place.rating);
-      console.log("Place userRatingCount:", place.userRatingCount);
+      
+      
+      
       return {
         place_id: place.id ?? "",
         name: place.displayName?.text ?? "",
@@ -152,7 +152,7 @@ export async function searchPlaces(
       };
     });
 
-    console.log("Transformed places:", transformedPlaces);
+    
     return transformedPlaces;
   } catch (error) {
     console.error("Error searching places:", error);

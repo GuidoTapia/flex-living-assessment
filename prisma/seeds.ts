@@ -6,9 +6,6 @@ import urlImages from "./url-images";
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Starting seed...");
-
-  // Get admin credentials from environment variables
   const adminEmail = process.env.ADMIN_EMAIL;
   const adminPassword = process.env.ADMIN_PASSWORD;
   const adminName = process.env.ADMIN_NAME;
@@ -30,7 +27,7 @@ async function main() {
     },
   });
 
-  console.log(`Created demo user: ${demoUser.email}`);
+  
 
   const categories = await Promise.all([
     prisma.category.upsert({
@@ -60,7 +57,7 @@ async function main() {
     }),
   ]);
 
-  console.log(`Created ${categories.length} categories`);
+  
 
   const properties = await Promise.all([
     prisma.property.upsert({
@@ -150,7 +147,7 @@ async function main() {
     }),
   ]);
 
-  console.log(`Created ${properties.length} properties`);
+  
 
   const listings = await Promise.all([
     prisma.listing.upsert({
@@ -200,7 +197,7 @@ async function main() {
     }),
   ]);
 
-  console.log(`Created ${listings.length} listings`);
+  
 
   const reviews = await Promise.all([
     prisma.review.upsert({
@@ -457,7 +454,7 @@ async function main() {
     }),
   ]);
 
-  console.log(`Created ${reviews.length} reviews`);
+  
 
   await Promise.all([
     prisma.review.update({
@@ -510,7 +507,7 @@ async function main() {
     }),
   ]);
 
-  console.log("Seed completed successfully!");
+  
 }
 
 main()

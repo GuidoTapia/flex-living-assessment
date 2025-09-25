@@ -4,25 +4,7 @@ This document describes the Hostaway API integration for fetching and syncing re
 
 ## API Endpoints
 
-### 1. Test Connection
-**GET** `/api/reviews/test`
-
-Tests the Hostaway API connection and returns sample data.
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Hostaway API connection successful",
-  "data": {
-    "totalReviews": 150,
-    "sampleReviews": 5,
-    "firstReview": { ... }
-  }
-}
-```
-
-### 2. Fetch Hostaway Reviews
+### Fetch Hostaway Reviews
 **GET** `/api/reviews/hostaway`
 
 Fetches reviews from Hostaway API, normalizes them, and optionally includes existing database reviews.
@@ -79,29 +61,13 @@ Fetches reviews from Hostaway API, normalizes them, and optionally includes exis
 
 **Note:** When `includeDb=true`, the response includes both normalized Hostaway reviews and existing database reviews in the same `data` array.
 
-### 3. Test Connection
-**GET** `/api/reviews/test`
-
-Tests the Hostaway API connection and returns sample data.
-
-**Response:**
-```json
-{
-  "success": true,
-  "message": "Hostaway API connection successful",
-  "data": {
-    "totalReviews": 150,
-    "sampleReviews": 5,
-    "firstReview": { ... }
-  }
-}
-```
-
 ## Configuration
 
-The Hostaway API credentials are configured in the service:
-- Account ID: `61148`
-- API Key: `f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152`
+The Hostaway API credentials are configured via environment variables:
+- `HOSTAWAY_ACCOUNT_ID` - Your Hostaway account ID
+- `HOSTAWAY_API_KEY` - Your Hostaway API key
+
+If these environment variables are not set, the Hostaway integration will be disabled and the API will return a 503 error.
 
 ## Data Normalization
 
@@ -121,24 +87,19 @@ All endpoints include comprehensive error handling:
 - Data validation errors
 - Database connection issues
 
-## Testing
+## Usage Examples
 
-1. **Test the connection:**
-   ```bash
-   curl http://localhost:3000/api/reviews/test
-   ```
-
-2. **Fetch sample normalized reviews:**
+1. **Fetch sample normalized reviews:**
    ```bash
    curl "http://localhost:3000/api/reviews/hostaway?limit=5"
    ```
 
-3. **Fetch reviews with database data:**
+2. **Fetch reviews with database data:**
    ```bash
    curl "http://localhost:3000/api/reviews/hostaway?limit=10&includeDb=true"
    ```
 
-4. **Test with different pagination:**
+3. **Fetch with different pagination:**
    ```bash
    curl "http://localhost:3000/api/reviews/hostaway?limit=20&offset=40"
    ```

@@ -277,11 +277,10 @@ export const propertyRouter = createTRPCRouter({
         return null;
       }
 
-      // Try to get Google Places data if API is configured
       let googlePlacesData = null;
 
-      console.log("property.name", property.name);
-      console.log("property.address", property.address);
+      
+      
       if (isConfigured() && property.name && property.address) {
         try {
           const googlePlace = await findPlaceByAddress(
@@ -289,7 +288,7 @@ export const propertyRouter = createTRPCRouter({
             property.city ?? "",
             property.country ?? "",
           );
-          console.log("googlePlace", googlePlace);
+          
           if (googlePlace) {
             googlePlacesData = normalizePlaceData(googlePlace);
           }
@@ -298,7 +297,7 @@ export const propertyRouter = createTRPCRouter({
         }
       }
 
-      console.log("googlePlacesData", googlePlacesData);
+      
 
       return {
         ...property,

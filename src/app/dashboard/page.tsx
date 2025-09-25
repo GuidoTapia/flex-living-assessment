@@ -101,9 +101,9 @@ export default function ManagerDashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    console.log("Dashboard - Auth status:", status);
+    
     if (status === "unauthenticated") {
-      console.log("Dashboard - Redirecting to sign in");
+      
       router.push("/auth/signin");
     }
   }, [status, router]);

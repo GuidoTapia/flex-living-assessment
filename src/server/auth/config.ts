@@ -35,22 +35,13 @@ export const authConfig = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: Record<string, unknown> | undefined) {
-        console.log(
-          "🔐 Credentials Provider - Received credentials:",
-          credentials,
-        );
 
         if (!credentials?.email || !credentials?.password) {
-          console.log("❌ Credentials Provider - Missing email or password");
           return null;
         }
 
         const { email, password } = credentials as { email: string; password: string };
 
-        console.log(
-          "🔍 Credentials Provider - Looking for user:",
-          email,
-        );
         const user = await db.user.findUnique({
           where: {
             email,
@@ -58,34 +49,24 @@ export const authConfig = {
         });
 
         if (!user) {
-          console.log("❌ Credentials Provider - User not found");
           return null;
         }
 
-        console.log("👤 Credentials Provider - User found:", {
-          id: user.id,
-          email: user.email,
-          hasPassword: !!user.password,
-        });
 
         // Check if user has a password (for credential-based auth)
         if (!user.password) {
-          console.log("❌ Credentials Provider - User has no password");
           return null;
         }
 
-        console.log("🔑 Credentials Provider - Comparing passwords");
         const isPasswordValid = await bcrypt.compare(
           password,
           user.password,
         );
 
         if (!isPasswordValid) {
-          console.log("❌ Credentials Provider - Password invalid");
           return null;
         }
 
-        console.log("✅ Credentials Provider - Authentication successful");
         return {
           id: user.id,
           email: user.email,
@@ -104,8 +85,6 @@ export const authConfig = {
   },
   callbacks: {
     session: ({ session, token }) => {
-      console.log("📝 Session Callback - Session:", session);
-      console.log("📝 Session Callback - Token:", token);
       const result = {
         ...session,
         user: {
@@ -113,34 +92,23 @@ export const authConfig = {
           id: token.sub,
         },
       };
-      console.log("📝 Session Callback - Result:", result);
       return result;
     },
     jwt: ({ token, user }) => {
-      console.log("🔑 JWT Callback - Token:", token);
-      console.log("🔑 JWT Callback - User:", user);
       if (user) {
         token.sub = user.id;
-        console.log("🔑 JWT Callback - Set token.sub to:", user.id);
       }
       return token;
     },
     redirect: ({ url, baseUrl }) => {
-      console.log("🔄 Redirect Callback - URL:", url);
-      console.log("🔄 Redirect Callback - Base URL:", baseUrl);
-      // Always redirect to dashboard after successful sign in
       if (url.startsWith("/")) {
         const redirectUrl = `${baseUrl}/dashboard`;
-        console.log("🔄 Redirect Callback - Redirecting to:", redirectUrl);
         return redirectUrl;
       }
-      // If it's a full URL, check if it's the same origin
       if (new URL(url).origin === baseUrl) {
-        console.log("🔄 Redirect Callback - Same origin, redirecting to:", url);
         return url;
       }
       const fallbackUrl = `${baseUrl}/dashboard`;
-      console.log("🔄 Redirect Callback - Fallback redirect to:", fallbackUrl);
       return fallbackUrl;
     },
   },

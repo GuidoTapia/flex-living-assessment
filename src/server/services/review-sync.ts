@@ -10,7 +10,7 @@ interface SyncResult {
 
 export class ReviewSyncService {
   async syncHostawayReviews(): Promise<SyncResult> {
-    console.log("Starting Hostaway reviews sync...");
+    
 
     const result: SyncResult = {
       syncedCount: 0,
@@ -23,7 +23,7 @@ export class ReviewSyncService {
       const hostawayReviews = await hostawayService.fetchAllReviews();
       result.totalFetched = hostawayReviews.length;
 
-      console.log(`Fetched ${hostawayReviews.length} reviews from Hostaway`);
+      
 
       for (const hostawayReview of hostawayReviews) {
         try {
@@ -39,9 +39,6 @@ export class ReviewSyncService {
         }
       }
 
-      console.log(
-        `Sync completed: ${result.syncedCount} synced, ${result.errorCount} errors`,
-      );
       return result;
     } catch (error) {
       console.error("Error in sync process:", error);

@@ -29,7 +29,7 @@ export default function SignInPage() {
 
   useEffect(() => {
     if (status === "authenticated") {
-      console.log("SignIn - Redirecting to dashboard");
+      
       router.push("/dashboard");
     }
   }, [status, router]);
@@ -40,20 +40,20 @@ export default function SignInPage() {
     setError("");
 
     try {
-      console.log("SignIn - Attempting sign in for:", email);
+      
       const result = await signIn("credentials", {
         email,
         password,
         redirect: false,
       });
 
-      console.log("SignIn - Result:", result);
-      console.log("SignIn - Result.ok:", result?.ok);
-      console.log("SignIn - Result.error:", result?.error);
-      console.log("SignIn - Result.url:", result?.url);
+      
+      
+      
+      
 
       if (result?.error) {
-        console.log("SignIn - Error:", result.error);
+        
         setError("Invalid email or password");
         notifications.show({
           title: "Login Failed",
@@ -62,7 +62,7 @@ export default function SignInPage() {
         });
         setLoading(false);
       } else if (result?.ok) {
-        console.log("SignIn - Success, redirecting to dashboard");
+        
         notifications.show({
           title: "Login Successful",
           message: "Welcome back!",

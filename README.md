@@ -1,29 +1,151 @@
-# Create T3 App
+# Flex Living Assessment
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+A property management application with review integration from Hostaway and Google Places API.
 
-## What's next? How do I make an app with this?
+## Prerequisites
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+- Node.js 18+ 
+- pnpm package manager
+- PostgreSQL database (local or cloud)
+- Google Places API key
+- Hostaway API credentials (optional)
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+## Local Development Setup
 
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Drizzle](https://orm.drizzle.team)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
+### 1. Clone and Install Dependencies
 
-## Learn More
+```bash
+gh repo clone GuidoTapia/flex-living-assessment
+cd flex-living-assessment
+pnpm install
+```
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### 2. Environment Configuration
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+Create a `.env` file in the root directory:
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/flex_living"
 
-## How do I deploy this?
+# NextAuth.js
+AUTH_SECRET="your-secret-key-here"
+NEXTAUTH_URL="http://localhost:3000"
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+# Google Places API
+GOOGLE_PLACES_API_KEY="your-google-places-api-key"
+
+# Hostaway API (optional)
+HOSTAWAY_ACCOUNT_ID="your-hostaway-account-id"
+HOSTAWAY_API_KEY="your-hostaway-api-key"
+
+# Admin User (for seeding)
+ADMIN_EMAIL="admin@example.com"
+ADMIN_PASSWORD="secure-password"
+ADMIN_NAME="Admin User"
+```
+
+### 3. Database Setup
+
+#### Option A: Local PostgreSQL
+
+1. Install PostgreSQL locally
+2. Create a database:
+```sql
+CREATE DATABASE flex_living;
+```
+
+#### Option B: Cloud Database (Recommended)
+
+Use one of these providers:
+- **Neon** (Free tier available): https://neon.tech
+- **Supabase** (Free tier available): https://supabase.com
+- **PlanetScale** (Free tier available): https://planetscale.com
+
+Get your connection string and update `DATABASE_URL` in `.env`.
+
+### 4. Database Migration and Seeding
+
+```bash
+# Generate Prisma client
+pnpm prisma generate
+
+# Run database migrations
+pnpm prisma db push
+
+# Seed the database with sample data
+pnpm prisma db seed
+```
+
+### 5. Start Development Server
+
+```bash
+pnpm dev
+```
+
+The application will be available at http://localhost:3000
+
+## API Keys Setup
+
+### Google Places API
+
+1. Go to [Google Cloud Console](https://console.cloud.google.com)
+2. Enable the Places API (New)
+3. Create credentials (API Key)
+4. Restrict the key to your domain for production
+5. Add the key to your `.env` file
+
+### Hostaway API (Optional)
+
+1. Contact Hostaway for API access
+2. Get your Account ID and API Key
+3. Add credentials to your `.env` file
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js app directory
+│   ├── _components/        # Reusable components
+│   ├── api/               # API routes
+│   ├── auth/              # Authentication pages
+│   ├── dashboard/         # Admin dashboard
+│   ├── properties/        # Property listings
+│   └── property/          # Individual property pages
+├── server/                # Server-side code
+│   ├── api/               # tRPC routers
+│   ├── auth/              # NextAuth configuration
+│   └── services/          # External API services
+├── styles/                # Global styles
+└── trpc/                  # tRPC client setup
+```
+
+## Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm prisma studio` - Open Prisma Studio
+- `pnpm prisma db push` - Push schema changes to database
+- `pnpm prisma db seed` - Seed database with sample data
+
+## Features
+
+- Property listings with search and filtering
+- Review management system
+- Hostaway API integration for external reviews
+- Google Places API integration for property details
+- Admin dashboard for review approval
+- Authentication with NextAuth.js
+- Responsive design with Mantine UI
+
+## Database Schema
+
+The application uses the following main entities:
+- **Users** - Authentication and user management
+- **Properties** - Property listings
+- **Listings** - External listing references
+- **Reviews** - Guest reviews from various sources
+- **Categories** - Property categories
+
