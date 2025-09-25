@@ -27,7 +27,7 @@ export default function Layout({ children, logOut }: LayoutProps) {
   return (
     <AppShell header={{ height: 88 }}>
       <AppShell.Header
-      px={36}
+        px={36}
         bg={scrolled ? "brand.6" : "light.0"}
         style={{
           transition: "background-color 0.3s ease, box-shadow 0.3s ease",

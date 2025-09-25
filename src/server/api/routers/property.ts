@@ -6,7 +6,6 @@ import {
 } from "~/server/api/trpc";
 
 export const propertyRouter = createTRPCRouter({
-  // Public search endpoint for properties with only approved reviews
   search: publicProcedure
     .input(
       z.object({
@@ -103,7 +102,6 @@ export const propertyRouter = createTRPCRouter({
         nextCursor = nextItem?.id;
       }
 
-      // Calculate average rating from approved reviews only
       const propertiesWithMetrics = properties.map((property) => {
         const approvedReviews = property.reviews;
         const totalReviews = approvedReviews.length;

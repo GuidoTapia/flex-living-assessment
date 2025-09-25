@@ -70,7 +70,6 @@ const amenities = [
 export default function PropertyDetails({ property }: PropertyDetailsProps) {
   return (
     <Stack gap="xl">
-      {/* Description */}
       <Card shadow="lg" p="lg">
         <Title order={4} mb="md">
           About this property
@@ -85,7 +84,6 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         {property.description && <Text size="md">{property.description}</Text>}
       </Card>
 
-      {/* Amenities */}
       <Card shadow="lg" p="lg">
         <Title order={4} mb="md">
           Amenities
@@ -114,13 +112,11 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         </Grid>
       </Card>
 
-      {/* Stay Policies */}
       <Card shadow="lg" p="lg">
         <Title order={4} mb="xl" c="dark">
           Stay Policies
         </Title>
         <Stack gap="xl">
-          {/* Check-in & Check-out */}
           <Paper bg="brand.0" p="xl" radius="xl" shadow="xs">
             <Group gap="md" mb="md">
               <ThemeIcon color="brand" variant="light" size="lg" radius="xl">
@@ -154,7 +150,6 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
             </Grid>
           </Paper>
 
-          {/* House Rules */}
           <Paper bg="brand.0" p="xl" radius="xl" shadow="xs">
             <Group gap="md" mb="md">
               <ThemeIcon color="brand" variant="light" size="lg" radius="xl">
@@ -216,7 +211,6 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
             </Grid>
           </Paper>
 
-          {/* Cancellation Policy */}
           <Paper bg="brand.0" p="xl" radius="xl" shadow="xs">
             <Group gap="md" mb="md">
               <ThemeIcon color="brand" variant="light" size="lg" radius="xl">
@@ -290,7 +284,6 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         </Stack>
       </Card>
 
-      {/* Location */}
       <Card shadow="lg" p="lg">
         <Title order={4} mb="md">
           Location

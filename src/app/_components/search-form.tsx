@@ -27,7 +27,6 @@ export default function SearchForm() {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Build search parameters
     const params = new URLSearchParams();
     if (searchParams.city) params.set("city", searchParams.city);
     if (searchParams.dateRange?.[0]) {
@@ -49,7 +48,6 @@ export default function SearchForm() {
     if (searchParams.guests)
       params.set("guests", searchParams.guests.toString());
 
-    // Navigate to properties page with search parameters
     router.push(`/properties?${params.toString()}`);
   };
 

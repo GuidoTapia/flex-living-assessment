@@ -41,9 +41,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
     <Layout>
       <Box bg="light.0" style={{ minHeight: "100vh" }}>
         <Container size="xl" py="xl" px="xl">
-          {/* Property Header */}
           <Flex direction="column" gap="xl">
-            {/* Property Image */}
             <BackgroundImage
               src={property.image}
               radius="md"
@@ -52,11 +50,9 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
               mb="md"
             />
 
-            {/* Property Info */}
             <Stack flex={1} gap="md">
               <Title order={3}>{property.name}</Title>
 
-              {/* Key Features */}
               <Group gap="xl">
                 {property.guests && (
                   <Group gap="xs" align="center">
@@ -106,14 +102,12 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
             </Stack>
           </Flex>
           <Divider my="xl" />
-          {/* Property Details and Reviews */}
+
           <Grid gutter="xl">
-            {/* Property Details */}
             <GridCol span={{ base: 12, lg: 8 }}>
               <PropertyDetails property={property} />
             </GridCol>
 
-            {/* Reviews Section */}
             <GridCol span={{ base: 12, lg: 4 }}>
               <Card shadow="sm" radius="md">
                 <CardSection bg="brand.6" p="lg">

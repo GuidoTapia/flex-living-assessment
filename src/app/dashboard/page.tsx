@@ -26,7 +26,6 @@ import {
   SimpleGrid,
   ThemeIcon,
 } from "@mantine/core";
-import { DateInput } from "@mantine/dates";
 import { api } from "~/trpc/react";
 import {
   IconSearch,
@@ -190,7 +189,6 @@ export default function ManagerDashboard() {
 
           <Tabs.Panel value="overview" pt="md">
             <Grid>
-              {/* Performance Summary Cards */}
               <Grid.Col span={12}>
                 <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing="md">
                   <Paper p="md" withBorder>
@@ -259,7 +257,6 @@ export default function ManagerDashboard() {
                 </SimpleGrid>
               </Grid.Col>
 
-              {/* Channel Breakdown */}
               <Grid.Col span={{ base: 12, md: 6 }}>
                 <Card withBorder>
                   <Card.Section p="md">
@@ -292,7 +289,6 @@ export default function ManagerDashboard() {
                 </Card>
               </Grid.Col>
 
-              {/* Category Breakdown */}
               <Grid.Col span={{ base: 12, md: 6 }}>
                 <Card withBorder>
                   <Card.Section p="md">
@@ -326,7 +322,6 @@ export default function ManagerDashboard() {
           </Tabs.Panel>
 
           <Tabs.Panel value="reviews" pt="md">
-            {/* Filters */}
             <Card withBorder mb="md">
               <Card.Section p="md">
                 <Title order={3} mb="md">
@@ -412,7 +407,6 @@ export default function ManagerDashboard() {
               </Card.Section>
             </Card>
 
-            {/* Bulk Actions */}
             {selectedReviews.length > 0 && (
               <Card withBorder mb="md">
                 <Card.Section p="md">
@@ -442,7 +436,6 @@ export default function ManagerDashboard() {
               </Card>
             )}
 
-            {/* Reviews Table */}
             <Card withBorder>
               <Card.Section p="md">
                 <Group justify="space-between" mb="md">

@@ -50,12 +50,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     >
       <Box>
         <Box style={{ position: "relative" }}>
-          <BackgroundImage
-            src={property.image}
-            w="100%"
-            h="224px"
-            p="xs"
-          >
+          <BackgroundImage src={property.image} w="100%" h="224px" p="xs">
             <Flex justify="flex-end">
               {property.price && (
                 <Paper bg="light.0" p={4}>

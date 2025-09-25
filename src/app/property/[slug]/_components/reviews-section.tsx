@@ -109,7 +109,6 @@ export default function ReviewsSection({
 
   return (
     <div className="space-y-6">
-      {/* Reviews Summary */}
       <Card withBorder>
         <Card.Section p="md">
           <Group justify="space-between" mb="md">
@@ -124,7 +123,6 @@ export default function ReviewsSection({
             </Badge>
           </Group>
 
-          {/* Average Rating */}
           <Group gap="md" mb="md">
             <div className="text-center">
               <div className="text-4xl font-bold text-gray-900">
@@ -160,7 +158,6 @@ export default function ReviewsSection({
         </Card.Section>
       </Card>
 
-      {/* Filters */}
       <Card withBorder>
         <Card.Section p="md">
           <Title order={4} mb="md">
@@ -218,7 +215,6 @@ export default function ReviewsSection({
         </Card.Section>
       </Card>
 
-      {/* Reviews List */}
       <Card withBorder>
         <Card.Section p="md">
           <Title order={4} mb="md">
@@ -296,7 +292,6 @@ export default function ReviewsSection({
         </Card.Section>
       </Card>
 
-      {/* Review Detail Modal */}
       <Modal opened={opened} onClose={close} title="Review Details" size="lg">
         {selectedReview && (
           <Stack gap="md">

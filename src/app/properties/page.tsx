@@ -38,7 +38,6 @@ export default function PropertiesPage() {
     rating: "",
   });
 
-  // Use the real API to fetch properties
   const {
     data: propertiesData,
     isLoading,
@@ -53,7 +52,6 @@ export default function PropertiesPage() {
     limit: 20,
   });
 
-  // Refetch when filters change
   useEffect(() => {
     void refetch();
   }, [filters, refetch]);
@@ -63,7 +61,6 @@ export default function PropertiesPage() {
   return (
     <Layout>
       <Box w="100%">
-        {/* Search and Filter Section */}
         <Box p="md">
           <Flex direction={{ base: "column", md: "row" }} gap="md" align="end">
             <Select
