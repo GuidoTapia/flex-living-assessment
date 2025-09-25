@@ -328,16 +328,7 @@ export default function ManagerDashboard() {
                   Filters
                 </Title>
                 <Grid>
-                  <Grid.Col span={{ base: 12, md: 3 }}>
-                    <TextInput
-                      placeholder="Search reviews..."
-                      leftSection={<IconSearch size={16} />}
-                      value={filters.search}
-                      onChange={(e) =>
-                        setFilters({ ...filters, search: e.target.value })
-                      }
-                    />
-                  </Grid.Col>
+                  
                   <Grid.Col span={{ base: 12, md: 2 }}>
                     <Select
                       placeholder="Channel"
@@ -371,38 +362,7 @@ export default function ManagerDashboard() {
                       clearable
                     />
                   </Grid.Col>
-                  <Grid.Col span={{ base: 12, md: 2 }}>
-                    <NumberInput
-                      placeholder="Min Rating"
-                      min={1}
-                      max={5}
-                      step={0.1}
-                      value={filters.ratingMin}
-                      onChange={(value) =>
-                        setFilters({
-                          ...filters,
-                          ratingMin:
-                            typeof value === "number" ? value : undefined,
-                        })
-                      }
-                    />
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 12, md: 2 }}>
-                    <NumberInput
-                      placeholder="Max Rating"
-                      min={1}
-                      max={5}
-                      step={0.1}
-                      value={filters.ratingMax}
-                      onChange={(value) =>
-                        setFilters({
-                          ...filters,
-                          ratingMax:
-                            typeof value === "number" ? value : undefined,
-                        })
-                      }
-                    />
-                  </Grid.Col>
+                  
                 </Grid>
               </Card.Section>
             </Card>

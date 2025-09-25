@@ -4,6 +4,11 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
+import {
+  findPlaceByAddress,
+  normalizePlaceData,
+  isConfigured,
+} from "~/server/services/google-places";
 
 export const propertyRouter = createTRPCRouter({
   search: publicProcedure
@@ -254,7 +259,7 @@ export const propertyRouter = createTRPCRouter({
   getBySlug: publicProcedure
     .input(z.object({ slug: z.string() }))
     .query(async ({ ctx, input }) => {
-      return await ctx.db.property.findUnique({
+      const property = await ctx.db.property.findUnique({
         where: { slug: input.slug },
         include: {
           reviews: {
@@ -267,6 +272,38 @@ export const propertyRouter = createTRPCRouter({
           },
         },
       });
+
+      if (!property) {
+        return null;
+      }
+
+      // Try to get Google Places data if API is configured
+      let googlePlacesData = null;
+
+      console.log("property.name", property.name);
+      console.log("property.address", property.address);
+      if (isConfigured() && property.name && property.address) {
+        try {
+          const googlePlace = await findPlaceByAddress(
+            property.address,
+            property.city ?? "",
+            property.country ?? "",
+          );
+          console.log("googlePlace", googlePlace);
+          if (googlePlace) {
+            googlePlacesData = normalizePlaceData(googlePlace);
+          }
+        } catch (error) {
+          console.warn("Failed to fetch Google Places data:", error);
+        }
+      }
+
+      console.log("googlePlacesData", googlePlacesData);
+
+      return {
+        ...property,
+        googlePlaces: googlePlacesData,
+      };
     }),
 
   getPerformanceSummary: protectedProcedure

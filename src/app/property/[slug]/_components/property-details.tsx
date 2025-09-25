@@ -10,6 +10,7 @@ import {
   Box,
   GridCol,
   Paper,
+  Rating,
 } from "@mantine/core";
 import {
   IconWifi,
@@ -51,6 +52,12 @@ interface PropertyDetailsProps {
         name: string;
       }>;
     }>;
+    googlePlaces?: {
+      address?: string | null;
+      totalRatings?: number | null;
+      rating?: number | null;
+      name?: string | null;
+    };
   };
 }
 
@@ -288,10 +295,36 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
         <Title order={4} mb="md">
           Location
         </Title>
-        <Text size="sm" c="dimmed" mb="md">
-          {property.address && `${property.address}, `}
-          {property.city}, {property.country}
-        </Text>
+
+        {property.googlePlaces?.address && (
+          <Text size="sm" c="dimmed" mb="md">
+            {property.googlePlaces.address}
+          </Text>
+        )}
+        {property.googlePlaces?.name && (
+          <Text size="sm" c="dimmed" mb="md">
+            {property.googlePlaces.name}
+          </Text>
+        )}
+        {property.googlePlaces?.rating &&
+        Boolean(property.googlePlaces?.rating) ? (
+          <Group gap="lg" align="center" justify="flex-start">
+            <Group gap="xs">
+              <Rating
+                value={property.googlePlaces.rating}
+                readOnly
+                size="sm"
+                fractions={2}
+              />
+              <Text size="lg" fw={600} variant="light">
+                {property.googlePlaces.rating.toFixed(1)}
+              </Text>
+            </Group>
+            <Text size="md" variant="light">
+              {property.googlePlaces.totalRatings} reviews in Google Places
+            </Text>
+          </Group>
+        ) : null}
 
         <Stack gap="sm" mt="md">
           <Text size="sm" fw={500}>
