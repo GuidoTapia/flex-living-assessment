@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import PropertyDetails from "./_components/property-details";
 import {
   Container,
-  Paper,
   Title,
   Text,
   Group,
@@ -16,22 +15,12 @@ import {
   Box,
   BackgroundImage,
   Card,
-  SimpleGrid,
   GridCol,
   CardSection,
   Divider,
   ThemeIcon,
 } from "@mantine/core";
-import {
-  IconStar,
-  IconStarFilled,
-  IconStars,
-  IconMapPin,
-  IconBed,
-  IconBath,
-  IconUsers,
-  IconCalendar,
-} from "@tabler/icons-react";
+import { IconBed, IconBath, IconUsers } from "@tabler/icons-react";
 import Layout from "~/app/_components/layout";
 
 interface PropertyPageProps {
@@ -56,7 +45,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
           <Flex direction="column" gap="xl">
             {/* Property Image */}
             <BackgroundImage
-              src="https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/130509-334995-yeOtFqiKvZy5LKuGUjVw7--Le--kcJYltlrYGOrMjk47g-6748eacfbb75b"
+              src={property.image}
               radius="md"
               w="100%"
               h={480}
@@ -151,7 +140,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                     </Group>
                   </Stack>
                 </CardSection>
-                <Stack gap="md">
+                <Stack gap="md" mt="md">
                   {property.reviews.length === 0 ? (
                     <Text c="dimmed" ta="center" py="xl">
                       No reviews yet
@@ -163,11 +152,11 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
                           <Group justify="space-between">
                             <Group gap="sm">
                               <Avatar size="sm" color="brand">
-                                {review.authorName?.charAt(0) || "G"}
+                                {review.authorName?.charAt(0) ?? "G"}
                               </Avatar>
                               <Stack gap={2}>
                                 <Text size="sm" fw={500}>
-                                  {review.authorName || "Anonymous Guest"}
+                                  {review.authorName ?? "Anonymous Guest"}
                                 </Text>
                                 <Text size="xs" c="dimmed">
                                   {new Date(

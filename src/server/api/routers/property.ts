@@ -197,28 +197,28 @@ export const propertyRouter = createTRPCRouter({
         nextCursor = nextItem?.id;
       }
 
-      const propertiesWithMetrics = properties.map((property: any) => {
+      const propertiesWithMetrics = properties.map((property) => {
         const reviews = property.reviews;
         const totalReviews = reviews.length;
-        const approvedReviews = reviews.filter((r: any) => r.approved).length;
+        const approvedReviews = reviews.filter((r) => r.approved).length;
         const avgRating =
           reviews.length > 0
-            ? reviews.reduce((sum: number, r: any) => sum + r.rating, 0) /
+            ? reviews.reduce((sum: number, r) => sum + r.rating, 0) /
               reviews.length
             : 0;
 
         const channelStats = reviews.reduce(
-          (acc: Record<string, number>, review: any) => {
-            acc[review.channel] = (acc[review.channel] || 0) + 1;
+          (acc: Record<string, number>, review) => {
+            acc[review.channel] = (acc[review.channel] ?? 0) + 1;
             return acc;
           },
           {} as Record<string, number>,
         );
 
         const categoryStats = reviews.reduce(
-          (acc: Record<string, number>, review: any) => {
-            review.categories.forEach((category: any) => {
-              acc[category.name] = (acc[category.name] || 0) + 1;
+          (acc: Record<string, number>, review) => {
+            review.categories.forEach((category) => {
+              acc[category.name] = (acc[category.name] ?? 0) + 1;
             });
             return acc;
           },
@@ -228,7 +228,7 @@ export const propertyRouter = createTRPCRouter({
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         const recentReviews = reviews.filter(
-          (r: any) => r.createdAt >= thirtyDaysAgo,
+          (r) => r.createdAt >= thirtyDaysAgo,
         ).length;
 
         return {
@@ -320,7 +320,7 @@ export const propertyRouter = createTRPCRouter({
       categoryBreakdown.forEach(
         (review: { rating: number; categories: Array<{ name: string }> }) => {
           review.categories.forEach((category: { name: string }) => {
-            const existing = categoryMap.get(category.name) || {
+            const existing = categoryMap.get(category.name) ?? {
               count: 0,
               totalRating: 0,
             };
@@ -345,7 +345,7 @@ export const propertyRouter = createTRPCRouter({
         totalReviews,
         approvedReviews,
         pendingReviews: totalReviews - approvedReviews,
-        avgRating: avgRating._avg.rating || 0,
+        avgRating: avgRating._avg.rating ?? 0,
         approvalRate:
           totalReviews > 0 ? (approvedReviews / totalReviews) * 100 : 0,
         channelBreakdown,

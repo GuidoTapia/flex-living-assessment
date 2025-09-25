@@ -154,7 +154,7 @@ export const reviewRouter = createTRPCRouter({
         }) => {
           review.categories.forEach(
             (category: { id: string; name: string }) => {
-              const existing = categoryMap.get(category.id) || {
+              const existing = categoryMap.get(category.id) ?? {
                 count: 0,
                 totalRating: 0,
                 name: category.name,
@@ -181,7 +181,7 @@ export const reviewRouter = createTRPCRouter({
         totalReviews,
         approvedReviews,
         pendingReviews: totalReviews - approvedReviews,
-        avgRating: avgRating._avg.rating || 0,
+        avgRating: avgRating._avg.rating ?? 0,
         channelStats,
         categoryStats: processedCategoryStats,
       };

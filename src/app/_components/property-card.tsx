@@ -2,11 +2,9 @@ import Link from "next/link";
 import {
   Card,
   Group,
-  Badge,
   Stack,
   Title,
   Text,
-  Button,
   BackgroundImage,
   Paper,
   Flex,
@@ -53,7 +51,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
       <Box>
         <Box style={{ position: "relative" }}>
           <BackgroundImage
-            src="https://hostaway-platform.s3.us-west-2.amazonaws.com/listing/130509-334995-yeOtFqiKvZy5LKuGUjVw7--Le--kcJYltlrYGOrMjk47g-6748eacfbb75b"
+            src={property.image}
             w="100%"
             h="224px"
             p="xs"

@@ -1,34 +1,12 @@
-import {
-  Container,
-  Card,
-  Text,
-  Title,
-  Button,
-  Group,
-  ThemeIcon,
-  Badge,
-  Stack,
-  CardSection,
-  Flex,
-  BackgroundImage,
-  Box,
-} from "@mantine/core";
-import {
-  IconChartBar,
-  IconHome,
-  IconMessageCircle,
-  IconTrendingUp,
-} from "@tabler/icons-react";
+import { Container, Title, Flex, BackgroundImage, Box } from "@mantine/core";
 
-import Link from "next/link";
-import { auth } from "~/server/auth";
-import { api, HydrateClient } from "~/trpc/server";
+import { HydrateClient } from "~/trpc/server";
 import Layout from "./_components/layout";
 import SearchForm from "~/app/_components/search-form";
 
 export default async function Home() {
-  const hello = await api.post.hello({ text: "from tRPC" });
-  const session = await auth();
+  // const hello = await api.post.hello({ text: "from tRPC" });
+  // const session = await auth();
 
   return (
     <HydrateClient>

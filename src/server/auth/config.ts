@@ -82,7 +82,7 @@ export const authConfig = {
         console.log("🔑 Credentials Provider - Comparing passwords");
         const isPasswordValid = await bcrypt.compare(
           credentials.password,
-          user.password as string,
+          user.password,
         );
 
         if (!isPasswordValid) {

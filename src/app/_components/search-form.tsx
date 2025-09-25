@@ -30,7 +30,7 @@ export default function SearchForm() {
     // Build search parameters
     const params = new URLSearchParams();
     if (searchParams.city) params.set("city", searchParams.city);
-    if (searchParams.dateRange && searchParams.dateRange[0]) {
+    if (searchParams.dateRange?.[0]) {
       const checkInDate = searchParams.dateRange[0];
       const checkInString =
         typeof checkInDate === "string"
@@ -38,7 +38,7 @@ export default function SearchForm() {
           : checkInDate.toISOString();
       params.set("checkIn", checkInString);
     }
-    if (searchParams.dateRange && searchParams.dateRange[1]) {
+    if (searchParams.dateRange?.[1]) {
       const checkOutDate = searchParams.dateRange[1];
       const checkOutString =
         typeof checkOutDate === "string"
@@ -70,13 +70,12 @@ export default function SearchForm() {
             data={cities}
             value={searchParams.city}
             onChange={(value) =>
-              setSearchParams((prev) => ({ ...prev, city: value || "" }))
+              setSearchParams((prev) => ({ ...prev, city: value ?? "" }))
             }
             variant="unstyled"
           />
           <DatePickerInput
             placeholder="Dates"
-                
             leftSection={<IconCalendar size={18} />}
             size="lg"
             radius="lg"

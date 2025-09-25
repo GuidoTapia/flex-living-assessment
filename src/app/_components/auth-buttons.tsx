@@ -23,14 +23,14 @@ export function SignInButton({ className }: AuthButtonProps) {
 
 export function SignOutButton({ className }: AuthButtonProps) {
   const handleSignOut = () => {
-    signOut({ callbackUrl: "/" });
+    void signOut({ callbackUrl: "/" });
   };
 
   return (
     <button
       onClick={handleSignOut}
       className={
-        className ||
+        className ??
         "inline-block bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
       }
     >

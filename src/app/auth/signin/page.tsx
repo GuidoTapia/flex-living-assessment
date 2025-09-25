@@ -1,45 +1,34 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { signIn, getSession, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import {
   Container,
   Paper,
   TextInput,
   PasswordInput,
   Button,
-  Title,
   Text,
   Stack,
   Alert,
   Group,
   Box,
-  ThemeIcon,
   Image,
   Flex,
 } from "@mantine/core";
-import {
-  IconMail,
-  IconLock,
-  IconAlertCircle,
-  IconBuilding,
-} from "@tabler/icons-react";
+import { IconMail, IconLock, IconAlertCircle } from "@tabler/icons-react";
 import { notifications } from "@mantine/notifications";
 
 export default function SignInPage() {
-  const { data: session, status } = useSession();
+  const { status } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard";
 
   useEffect(() => {
-    console.log("SignIn - Auth status:", status);
-    console.log("SignIn - Session:", !!session);
     if (status === "authenticated") {
       console.log("SignIn - Redirecting to dashboard");
       router.push("/dashboard");
@@ -149,14 +138,6 @@ export default function SignInPage() {
               Sign in
             </Button>
 
-            <Group justify="space-between" mt="md">
-              <Text size="sm" c="dimmed">
-                Demo credentials:
-              </Text>
-              <Text size="xs" c="dimmed">
-                admin@flexliving.com / admin123
-              </Text>
-            </Group>
           </Stack>
         </form>
 

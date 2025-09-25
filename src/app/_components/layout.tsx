@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  AppShell,
-  Group,
-  Title,
-  Button,
-  Image,
-  Transition,
-} from "@mantine/core";
+import { AppShell, Group, Button, Image } from "@mantine/core";
 import { IconBuilding, IconLogout } from "@tabler/icons-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
@@ -34,7 +27,7 @@ export default function Layout({ children, logOut }: LayoutProps) {
   return (
     <AppShell header={{ height: 88 }}>
       <AppShell.Header
-        py={16}
+      px={36}
         bg={scrolled ? "brand.6" : "light.0"}
         style={{
           transition: "background-color 0.3s ease, box-shadow 0.3s ease",
@@ -42,42 +35,42 @@ export default function Layout({ children, logOut }: LayoutProps) {
           border: 0,
         }}
       >
-        <Group h="100%" px="md" justify="space-between">
+        <Group h="100%" justify="space-between">
           <Group>
             <Link href="/" style={{ textDecoration: "none", color: "inherit" }}>
               <Group gap="sm">
                 <Image
                   src={scrolled ? "/the-flex-negative.webp" : "/the-flex.webp"}
                   alt="The Flex"
-                  h={32}
+                  h={30}
                   w="auto"
                 />
               </Group>
             </Link>
           </Group>
 
-            <Group>
-              {logOut ? (
-                <Button
-                  variant="transparent"
-                  leftSection={<IconLogout size={16} />}
-                  color={scrolled ? "light.0" : "brand.6"}
-                  onClick={() => signOut({ callbackUrl: "/" })}
-                >
-                  Logout
-                </Button>
-              ) : (
-                <Button
-                  component={Link}
-                  href="/auth/signin"
-                  variant="transparent"
-                  leftSection={<IconBuilding size={16} />}
-                  color={scrolled ? "light.0" : "brand.6"}
-                >
-                  Manage Properties
-                </Button>
-              )}
-            </Group>
+          <Group>
+            {logOut ? (
+              <Button
+                variant="transparent"
+                leftSection={<IconLogout size={16} />}
+                color={scrolled ? "light.0" : "brand.6"}
+                onClick={() => signOut({ callbackUrl: "/" })}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Button
+                component={Link}
+                href="/auth/signin"
+                variant="transparent"
+                leftSection={<IconBuilding size={16} />}
+                color={scrolled ? "light.0" : "brand.6"}
+              >
+                Manage Properties
+              </Button>
+            )}
+          </Group>
         </Group>
       </AppShell.Header>
 

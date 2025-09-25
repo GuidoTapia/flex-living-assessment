@@ -7,7 +7,6 @@ import {
   Group,
   Stack,
   ThemeIcon,
-  Divider,
   Box,
   GridCol,
   Paper,
@@ -293,8 +292,8 @@ export default function PropertyDetails({ property }: PropertyDetailsProps) {
 
       {/* Location */}
       <Card shadow="lg" p="lg">
-        <Title order={3} mb="md">
-          Where you'll be
+        <Title order={4} mb="md">
+          Location
         </Title>
         <Text size="sm" c="dimmed" mb="md">
           {property.address && `${property.address}, `}

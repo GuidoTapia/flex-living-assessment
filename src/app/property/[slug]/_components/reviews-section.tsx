@@ -8,25 +8,18 @@ import {
   Group,
   Stack,
   Badge,
-  Button,
   Avatar,
   Divider,
   Modal,
   Select,
-  TextInput,
-  Textarea,
-  Rating,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
   IconStar,
-  IconStarFilled,
   IconMessageCircle,
   IconFilter,
   IconSortAscending,
-  IconSortDescending,
 } from "@tabler/icons-react";
-import { DateInput } from "@mantine/dates";
 
 interface Review {
   id: string;
@@ -48,7 +41,7 @@ interface ReviewsSectionProps {
 
 export default function ReviewsSection({
   reviews,
-  propertyName,
+  propertyName: _propertyName,
 }: ReviewsSectionProps) {
   const [sortBy, setSortBy] = useState<"newest" | "oldest" | "rating">(
     "newest",
@@ -142,7 +135,6 @@ export default function ReviewsSection({
               </Group>
             </div>
 
-            {/* Rating Distribution */}
             <div className="flex-1">
               <Stack gap="xs">
                 {ratingDistribution.map(({ rating, count, percentage }) => (
@@ -201,7 +193,7 @@ export default function ReviewsSection({
                   { value: "google", label: "Google" },
                 ]}
                 value={filterChannel}
-                onChange={(value) => setFilterChannel(value || "")}
+                onChange={(value) => setFilterChannel(value ?? "")}
                 clearable
                 leftSection={<IconFilter size={16} />}
               />
@@ -248,11 +240,11 @@ export default function ReviewsSection({
                     <Group justify="space-between" mb="xs">
                       <Group gap="xs">
                         <Avatar size="sm" color="blue">
-                          {review.authorName?.charAt(0) || "G"}
+                          {review.authorName?.charAt(0) ?? "G"}
                         </Avatar>
                         <div>
                           <Text size="sm" fw={500}>
-                            {review.authorName || "Anonymous Guest"}
+                            {review.authorName ?? "Anonymous Guest"}
                           </Text>
                           <Text size="xs" c="dimmed">
                             {new Date(review.createdAt).toLocaleDateString()}
@@ -311,11 +303,11 @@ export default function ReviewsSection({
             <Group justify="space-between">
               <Group gap="md">
                 <Avatar size="lg" color="blue">
-                  {selectedReview.authorName?.charAt(0) || "G"}
+                  {selectedReview.authorName?.charAt(0) ?? "G"}
                 </Avatar>
                 <div>
                   <Text fw={500} size="lg">
-                    {selectedReview.authorName || "Anonymous Guest"}
+                    {selectedReview.authorName ?? "Anonymous Guest"}
                   </Text>
                   <Text size="sm" c="dimmed">
                     {new Date(selectedReview.createdAt).toLocaleDateString()}

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Flex Living Reviews System",
   description:
     "Manage guest reviews and showcase your property's best features",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon-white.png" }],
 };
 
 const geist = Geist({

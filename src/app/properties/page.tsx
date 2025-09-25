@@ -3,11 +3,9 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import {
-  Container,
   Title,
   Text,
   Grid,
-  Group,
   Paper,
   Flex,
   Select,
@@ -16,9 +14,8 @@ import {
   Box,
   Loader,
   Center,
-  Button,
 } from "@mantine/core";
-import { IconStar, IconMapPin, IconSearch, IconCalendar, IconUser } from "@tabler/icons-react";
+import { IconMapPin, IconCalendar, IconUser } from "@tabler/icons-react";
 import Layout from "../_components/layout";
 import PropertyCard from "../_components/property-card";
 import { api } from "~/trpc/react";
@@ -28,12 +25,14 @@ import cities from "../shared/cities";
 export default function PropertiesPage() {
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState({
-    city: searchParams.get("city") || "",
-    checkIn: searchParams.get("checkIn") ? new Date(searchParams.get("checkIn")!) : null,
+    city: searchParams.get("city") ?? "",
+    checkIn: searchParams.get("checkIn")
+      ? new Date(searchParams.get("checkIn")!)
+      : null,
     checkOut: searchParams.get("checkOut")
       ? new Date(searchParams.get("checkOut")!)
       : null,
-    guests: parseInt(searchParams.get("guests") || "1"),
+    guests: parseInt(searchParams.get("guests") ?? "1"),
     priceMin: "",
     priceMax: "",
     rating: "",
@@ -56,10 +55,10 @@ export default function PropertiesPage() {
 
   // Refetch when filters change
   useEffect(() => {
-    refetch();
+    void refetch();
   }, [filters, refetch]);
 
-  const properties = propertiesData?.properties || [];
+  const properties = propertiesData?.properties ?? [];
 
   return (
     <Layout>
@@ -72,7 +71,7 @@ export default function PropertiesPage() {
               data={cities}
               value={filters.city}
               onChange={(value) =>
-                setFilters((prev) => ({ ...prev, city: value || "" }))
+                setFilters((prev) => ({ ...prev, city: value ?? "" }))
               }
               flex={1}
               leftSection={<IconMapPin size={16} />}
@@ -80,10 +79,18 @@ export default function PropertiesPage() {
             <DatePickerInput
               placeholder="Dates"
               type="range"
-            valueFormat="MMM DD, YYYY"
-              value={filters.checkIn ? [filters.checkIn, filters.checkOut] : undefined}
+              valueFormat="MMM DD, YYYY"
+              value={
+                filters.checkIn
+                  ? [filters.checkIn, filters.checkOut]
+                  : undefined
+              }
               onChange={(value) =>
-                setFilters((prev) => ({ ...prev, checkIn: value ? value[0] : null, checkOut: value ? value[1] : null }))
+                setFilters((prev) => ({
+                  ...prev,
+                  checkIn: value ? value[0] : null,
+                  checkOut: value ? value[1] : null,
+                }))
               }
               flex={1}
               leftSection={<IconCalendar size={16} />}
