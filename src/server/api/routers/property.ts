@@ -302,7 +302,12 @@ export const propertyRouter = createTRPCRouter({
 
       return {
         ...property,
-        googlePlaces: googlePlacesData,
+        googlePlaces: googlePlacesData ? {
+          address: googlePlacesData.address,
+          totalRatings: googlePlacesData.totalRatings,
+          rating: googlePlacesData.rating,
+          name: googlePlacesData.name,
+        } : undefined,
       };
     }),
 

@@ -43,7 +43,7 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
         <Container size="xl" py="xl" px="xl">
           <Flex direction="column" gap="xl">
             <BackgroundImage
-              src={property.image}
+              src={property.image || ""}
               radius="md"
               w="100%"
               h={480}

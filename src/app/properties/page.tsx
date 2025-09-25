@@ -85,8 +85,8 @@ export default function PropertiesPage() {
               onChange={(value) =>
                 setFilters((prev) => ({
                   ...prev,
-                  checkIn: value ? value[0] : null,
-                  checkOut: value ? value[1] : null,
+                  checkIn: value?.[0] ? new Date(value[0]) : null,
+                  checkOut: value?.[1] ? new Date(value[1]) : null,
                 }))
               }
               flex={1}
@@ -96,7 +96,7 @@ export default function PropertiesPage() {
               placeholder="Guests"
               value={filters.guests}
               onChange={(value) =>
-                setFilters((prev) => ({ ...prev, guests: value || 1 }))
+                setFilters((prev) => ({ ...prev, guests: Number(value) || 1 }))
               }
               flex={1}
               leftSection={<IconUser size={16} />}

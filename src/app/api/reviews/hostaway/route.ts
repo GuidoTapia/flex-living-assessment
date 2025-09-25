@@ -4,6 +4,18 @@ import { db as prisma } from "~/server/db";
 
 export async function GET(request: NextRequest) {
   try {
+    // Check if Hostaway is configured
+    if (!hostawayService.isConfigured()) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Hostaway API credentials not configured",
+          source: "hostaway",
+        },
+        { status: 503 },
+      );
+    }
+
     const { searchParams } = new URL(request.url);
     const limit = parseInt(searchParams.get("limit") ?? "100");
     const offset = parseInt(searchParams.get("offset") ?? "0");

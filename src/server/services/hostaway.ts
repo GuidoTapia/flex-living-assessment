@@ -35,14 +35,32 @@ class HostawayService {
   private accessToken: string | null = null;
   private tokenExpiry: number = 0;
   private readonly baseUrl = "https://api.hostaway.com/v1";
-  private readonly accountId = "61148";
-  private readonly apiKey =
-    "f94377ebbbb479490bb3ec364649168dc443dda2e4830facaf5de2e74ccc9152";
+  private readonly accountId: string;
+  private readonly apiKey: string;
+
+  constructor() {
+    this.accountId = env.HOSTAWAY_ACCOUNT_ID || "";
+    this.apiKey = env.HOSTAWAY_API_KEY || "";
+    
+    if (!this.accountId || !this.apiKey) {
+      console.warn("Hostaway API credentials not found. Hostaway integration will be disabled.");
+    }
+  }
+
+  /**
+   * Check if the service is properly configured
+   */
+  isConfigured(): boolean {
+    return !!(this.accountId && this.apiKey);
+  }
 
   /**
    * Get a valid access token, refreshing if necessary
    */
   private async getAccessToken(): Promise<string> {
+    if (!this.isConfigured()) {
+      throw new Error("Hostaway API credentials not configured");
+    }
     const now = Date.now();
 
     if (this.accessToken && this.tokenExpiry > now + 60000) {
@@ -87,6 +105,10 @@ class HostawayService {
     limit = 100,
     offset = 0,
   ): Promise<HostawayReviewsResponse> {
+    if (!this.isConfigured()) {
+      throw new Error("Hostaway API credentials not configured");
+    }
+    
     const token = await this.getAccessToken();
 
     const url = new URL(`${this.baseUrl}/reviews`);
@@ -176,6 +198,10 @@ class HostawayService {
    * Fetch all reviews with pagination
    */
   async fetchAllReviews(): Promise<HostawayReview[]> {
+    if (!this.isConfigured()) {
+      throw new Error("Hostaway API credentials not configured");
+    }
+    
     const allReviews: HostawayReview[] = [];
     let offset = 0;
     const limit = 100;

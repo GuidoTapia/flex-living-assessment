@@ -8,13 +8,24 @@ const prisma = new PrismaClient();
 async function main() {
   console.log("Starting seed...");
 
-  const hashedPassword = await bcrypt.hash("admin123", 12);
+  // Get admin credentials from environment variables
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const adminName = process.env.ADMIN_NAME;
+
+  if (!adminEmail || !adminPassword || !adminName) {
+    throw new Error(
+      "Missing required environment variables: ADMIN_EMAIL, ADMIN_PASSWORD, ADMIN_NAME"
+    );
+  }
+
+  const hashedPassword = await bcrypt.hash(adminPassword, 12);
   const demoUser = await prisma.user.upsert({
-    where: { email: "admin@theflex.global" },
+    where: { email: adminEmail },
     update: {},
     create: {
-      email: "admin@theflex.global",
-      name: "Admin User",
+      email: adminEmail,
+      name: adminName,
       password: hashedPassword,
     },
   });

@@ -34,7 +34,7 @@ export const authConfig = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials: Record<string, unknown> | undefined) {
         console.log(
           "🔐 Credentials Provider - Received credentials:",
           credentials,
@@ -45,13 +45,15 @@ export const authConfig = {
           return null;
         }
 
+        const { email, password } = credentials as { email: string; password: string };
+
         console.log(
           "🔍 Credentials Provider - Looking for user:",
-          credentials.email,
+          email,
         );
         const user = await db.user.findUnique({
           where: {
-            email: credentials.email,
+            email,
           },
         });
 
@@ -74,7 +76,7 @@ export const authConfig = {
 
         console.log("🔑 Credentials Provider - Comparing passwords");
         const isPasswordValid = await bcrypt.compare(
-          credentials.password,
+          password,
           user.password,
         );
 
